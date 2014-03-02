@@ -106,10 +106,21 @@ public class MQTTPublish extends MQTTMessage {
 		len = (byte) ((buffer[i] >> 8 & 0xFF) | (buffer[i + 1] & 0xFF));
 
 		// Get variable header (topic length + 2[topic len] + 2[pkg id])
-		variableHeader = new byte[len + 2 + 2];
 
-		// We have to step back two bytes since
+		switch (getQoS()) {
+		case AT_MOST_ONCE:
+			// No packageIdentifier
+			variableHeader = new byte[len + 2];
+			break;
+		case AT_LEAST_ONCE:
+		case EXACTLY_ONCE:
+			// 2 byte packageIdentifier
+			variableHeader = new byte[len + 2 + 2];
+			break;
+		}
+
 		System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
+		i += variableHeader.length;
 
 		// Get topic
 		topicName = new String(variableHeader, 2, len);
@@ -117,14 +128,19 @@ public class MQTTPublish extends MQTTMessage {
 		// Get payload
 		payload = new byte[remainingLength - variableHeader.length];
 
-		if (payload.length > 0)
-			System.arraycopy(buffer, i, payload, 0, payload.length);
-
-		// Only get package identifier if the QoS is above AT_MOST_ONCE
-		if (QoS > AT_MOST_ONCE) {
+		switch (getQoS()) {
+		case AT_MOST_ONCE:
+			// No packageIdentifier
+			break;
+		case AT_LEAST_ONCE:
+		case EXACTLY_ONCE:
+			// 2 byte packageIdentifier
 			packageIdentifier = (variableHeader[variableHeader.length - 1])
 					| (variableHeader[variableHeader.length - 2]);
+			break;
 		}
+
+		System.arraycopy(buffer, i, payload, 0, payload.length);
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public class MQTTHelper implements MQTTConstants {
 
 	public static boolean hasWildcards(String topic) {
 		// TODO, is the $ acceptable?
-		return topic.contains("/") || topic.contains("#")
+		return /*topic.contains("/") ||*/ topic.contains("#")
 				|| topic.contains("+");
 	}
 
