@@ -45,9 +45,9 @@ public class MQTTConnect extends MQTTMessage {
 	 * Retain Flag MUST be set to 0.
 	 */
 	private boolean willRetain;
-	private boolean willFlag;
-	private String willTopic;
-	private String willMessage;
+	private boolean willFlag = true;
+	private String willTopic = "wtopic";
+	private String willMessage = "wmessage";
 	private byte willQoS;
 
 	private String username;
@@ -80,26 +80,29 @@ public class MQTTConnect extends MQTTMessage {
 
 	public MQTTConnect(String clientIdentifier, String username,
 			String password, boolean cleanSession) {
-		this(clientIdentifier, username, password, cleanSession, 10);
+		this(clientIdentifier, username, password, false, AT_MOST_ONCE, null,
+				null, cleanSession, 10);
 	}
 
 	public MQTTConnect(String clientIdentifier, String username,
-			String password, boolean cleanSession, int keepAlive) {
+			String password, boolean willRetain, byte willQoS,
+			String willTopic, String willMessage, boolean cleanSession,
+			int keepAlive) {
 		this.type = CONNECT;
 
 		this.clientIdentifier = clientIdentifier;
-		this.cleanSession = true;
+		this.cleanSession = cleanSession;
 		this.keepAlive = keepAlive;
 
 		// Default flag values
-		this.willRetain = false;
-		this.willFlag = false;
-		this.willTopic = null;
-		this.willMessage = null;
+		this.willRetain = willRetain;
+		this.willFlag = (willTopic != null && willMessage != null);
+		this.willTopic = willTopic;
+		this.willMessage = willMessage;
 		this.willQoS = AT_MOST_ONCE;
 
-		this.username = null;
-		this.password = null;
+		this.username = username;
+		this.password = password;
 	}
 
 	public void setWill(String willTopic, String willMessage,
@@ -186,32 +189,18 @@ public class MQTTConnect extends MQTTMessage {
 		out.write(getProtocol());
 
 		// CONNECT FLAGS
-		byte flags = 0x00;
-
-		// Username
-		boolean username = (this.username != null && this.username.length() > 0);
-		flags |= (username ? 1 : 0) << 7;
-
-		// Password
-		boolean password = (this.password != null && this.password.length() > 0);
-		flags |= (password ? 1 : 0) << 6;
-
-		// Will Retain (MUST be 0 if willFlag is 0)
-		flags |= ((willRetain && willFlag) ? 1 : 0) << 5;
-
-		// Will QoS
-		flags |= willQoS << 3;
-
-		// Will Flag
-		flags |= (willFlag ? 1 : 0) << 2;
-
-		// Clean session
-		flags |= (cleanSession ? 1 : 0) << 1;
-
-		// The server MUST validate that the last bit in the flag byte is 0, or
-		// disconnect client.
-		flags |= 0 << 0;
-
+		byte flags = (byte) (0x00);
+		
+		byte username = (byte) ((this.username != null && this.username.length() >= 0) ? 0x01 : 0x00);
+		byte password = (byte) ((this.password != null && this.password.length() >= 0) ? 0x01 : 0x00);
+		byte willRetain = (byte) (this.willRetain ? 0x01 : 0x00);
+		byte willQoS = this.willQoS;
+		byte willFlag = (byte) ((this.willRetain && this.willFlag) ? 0x01 : 0x00);
+		byte cleanSession = (byte) (this.cleanSession ? 0x01 : 0x00);
+		byte RESERVED = (byte) 0x00;
+		
+		flags = (byte) ((username << 7) | (password << 6) | (willRetain << 5) | (willQoS << 3) | (willFlag << 2) | (cleanSession << 1) | (RESERVED << 0) );
+				
 		// Write flags
 		out.write(flags);
 
@@ -270,7 +259,7 @@ public class MQTTConnect extends MQTTMessage {
 		}
 
 		// USERNAME
-		if (username != null && username.length() > 0) {
+		if (username != null && username.length() >= 0) {
 			// Username MUST be UTF-8
 			if (MQTTHelper.isUTF8(username.getBytes("UTF-8")))
 				throw new MQTTException("Invalid username encoding");
@@ -281,7 +270,7 @@ public class MQTTConnect extends MQTTMessage {
 		}
 
 		// PASSWORD
-		if (password != null && password.length() > 0) {
+		if (password != null && password.length() >= 0) {
 			// Password MUST be UTF-8
 			if (MQTTHelper.isUTF8(password.getBytes("UTF-8")))
 				throw new MQTTException("Invalid password encoding");

@@ -28,6 +28,7 @@ import se.goransson.qatja.MQTTException;
  */
 public class MQTTConnack extends MQTTMessage {
 
+	@SuppressWarnings("unused")
 	private byte RESERVED;
 	private byte returnCode;
 
