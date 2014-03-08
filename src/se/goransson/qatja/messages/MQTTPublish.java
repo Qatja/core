@@ -148,9 +148,13 @@ public class MQTTPublish extends MQTTMessage {
 		// FIXED HEADER
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
+		byte type = this.type;
+		byte dup = (byte) (this.dup ? 0x01 : 0x00);
+		byte QoS = this.QoS;
+		byte retain = (byte) (this.retain ? 0x01 : 0x00);
+		
 		// Type and PUBLISH flags
-		byte fixed = (byte) ((type << 4) | (dup ? 1 : 0) << 3 | (QoS << 1) | (retain ? 1
-				: 0) << 0);
+		byte fixed = (byte) ((type << 4) | (dup << 3) | (QoS << 1) | (retain << 0));
 		out.write(fixed);
 
 		// Flags (none for PUBLISH)
@@ -228,6 +232,13 @@ public class MQTTPublish extends MQTTMessage {
 	 */
 	public boolean isRetain() {
 		return retain;
+	}
+
+	/**
+	 * @param retain the retain to set
+	 */
+	public void setRetain(boolean retain) {
+		this.retain = retain;
 	}
 
 	/**
