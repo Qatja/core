@@ -190,17 +190,21 @@ public class MQTTConnect extends MQTTMessage {
 
 		// CONNECT FLAGS
 		byte flags = (byte) (0x00);
-		
-		byte username = (byte) ((this.username != null && this.username.length() >= 0) ? 0x01 : 0x00);
-		byte password = (byte) ((this.password != null && this.password.length() >= 0) ? 0x01 : 0x00);
+
+		byte username = (byte) ((this.username != null && this.username
+				.length() >= 0) ? 0x01 : 0x00);
+		byte password = (byte) ((this.password != null && this.password
+				.length() >= 0) ? 0x01 : 0x00);
 		byte willRetain = (byte) (this.willRetain ? 0x01 : 0x00);
 		byte willQoS = this.willQoS;
-		byte willFlag = (byte) ((this.willRetain && this.willFlag) ? 0x01 : 0x00);
+		byte willFlag = (byte) ((this.willRetain && this.willFlag) ? 0x01
+				: 0x00);
 		byte cleanSession = (byte) (this.cleanSession ? 0x01 : 0x00);
 		byte RESERVED = (byte) 0x00;
-		
-		flags = (byte) ((username << 7) | (password << 6) | (willRetain << 5) | (willQoS << 3) | (willFlag << 2) | (cleanSession << 1) | (RESERVED << 0) );
-				
+
+		flags = (byte) ((username << 7) | (password << 6) | (willRetain << 5)
+				| (willQoS << 3) | (willFlag << 2) | (cleanSession << 1) | (RESERVED << 0));
+
 		// Write flags
 		out.write(flags);
 
@@ -295,66 +299,11 @@ public class MQTTConnect extends MQTTMessage {
 	}
 
 	/**
-	 * @return the willRetain
+	 * @param clientIdentifier
+	 *            the clientIdentifier to set
 	 */
-	public boolean isWillRetain() {
-		return willRetain;
-	}
-
-	/**
-	 * @return the willFlag
-	 */
-	public boolean isWillFlag() {
-		return willFlag;
-	}
-
-	/**
-	 * @return the willTopic
-	 */
-	public String getWillTopic() {
-		return willTopic;
-	}
-
-	/**
-	 * @return the willMessage
-	 */
-	public String getWillMessage() {
-		return willMessage;
-	}
-
-	/**
-	 * @return the willQoS
-	 */
-	public byte getWillQoS() {
-		return willQoS;
-	}
-
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @return the cleanSession
-	 */
-	public boolean isCleanSession() {
-		return cleanSession;
-	}
-
-	/**
-	 * @return the keepAlive
-	 */
-	public int getKeepAlive() {
-		return keepAlive;
+	public void setClientIdentifier(String clientIdentifier) {
+		this.clientIdentifier = clientIdentifier;
 	}
 
 	/**
@@ -365,10 +314,161 @@ public class MQTTConnect extends MQTTMessage {
 	}
 
 	/**
+	 * @param protocolVersion
+	 *            the protocolVersion to set
+	 */
+	public void setProtocolVersion(byte protocolVersion) {
+		this.protocolVersion = protocolVersion;
+	}
+
+	/**
 	 * @return the protocolName
 	 */
 	public String getProtocolName() {
 		return protocolName;
+	}
+
+	/**
+	 * @param protocolName
+	 *            the protocolName to set
+	 */
+	public void setProtocolName(String protocolName) {
+		this.protocolName = protocolName;
+	}
+
+	/**
+	 * @return the willRetain
+	 */
+	public boolean isWillRetain() {
+		return willRetain;
+	}
+
+	/**
+	 * @param willRetain
+	 *            the willRetain to set
+	 */
+	public void setWillRetain(boolean willRetain) {
+		this.willRetain = willRetain;
+	}
+
+	/**
+	 * @return the willFlag
+	 */
+	public boolean isWillFlag() {
+		return willFlag;
+	}
+
+	/**
+	 * @param willFlag
+	 *            the willFlag to set
+	 */
+	public void setWillFlag(boolean willFlag) {
+		this.willFlag = willFlag;
+	}
+
+	/**
+	 * @return the willTopic
+	 */
+	public String getWillTopic() {
+		return willTopic;
+	}
+
+	/**
+	 * @param willTopic
+	 *            the willTopic to set
+	 */
+	public void setWillTopic(String willTopic) {
+		this.willTopic = willTopic;
+	}
+
+	/**
+	 * @return the willMessage
+	 */
+	public String getWillMessage() {
+		return willMessage;
+	}
+
+	/**
+	 * @param willMessage
+	 *            the willMessage to set
+	 */
+	public void setWillMessage(String willMessage) {
+		this.willMessage = willMessage;
+	}
+
+	/**
+	 * @return the willQoS
+	 */
+	public byte getWillQoS() {
+		return willQoS;
+	}
+
+	/**
+	 * @param willQoS
+	 *            the willQoS to set
+	 */
+	public void setWillQoS(byte willQoS) {
+		this.willQoS = willQoS;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username
+	 *            the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the cleanSession
+	 */
+	public boolean isCleanSession() {
+		return cleanSession;
+	}
+
+	/**
+	 * @param cleanSession
+	 *            the cleanSession to set
+	 */
+	public void setCleanSession(boolean cleanSession) {
+		this.cleanSession = cleanSession;
+	}
+
+	/**
+	 * @return the keepAlive
+	 */
+	public int getKeepAlive() {
+		return keepAlive;
+	}
+
+	/**
+	 * @param keepAlive
+	 *            the keepAlive to set
+	 */
+	public void setKeepAlive(int keepAlive) {
+		this.keepAlive = keepAlive;
 	}
 
 }
