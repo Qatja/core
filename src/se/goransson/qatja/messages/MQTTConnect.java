@@ -185,9 +185,19 @@ public class MQTTConnect extends MQTTMessage {
 	protected byte[] generateVariableHeader() throws MQTTException, IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		// Most packages has this
-		out.write(getProtocol());
+		// Some packages has this
+		if(protocolName == null)
+			out.write(getProtocol());
+		else{
+			// For some reason I need to test this in the interop testing...
+			out.write((protocolName.getBytes("UTF-8").length >> 8) & 0xFF); // MSB
+			out.write(protocolName.getBytes("UTF-8").length & 0xFF); // LSB
+			out.write(protocolName.getBytes("UTF-8"));
 
+			// Protocol Level (Used by all messages)
+			out.write((byte) VERSION_311);
+		}
+		
 		// CONNECT FLAGS
 		byte flags = (byte) (0x00);
 
