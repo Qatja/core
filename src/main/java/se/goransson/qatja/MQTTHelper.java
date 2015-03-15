@@ -17,7 +17,6 @@ package se.goransson.qatja;
  */
 
 import org.mozilla.universalchardet.UniversalDetector;
-
 import se.goransson.qatja.messages.MQTTMessage;
 
 /**

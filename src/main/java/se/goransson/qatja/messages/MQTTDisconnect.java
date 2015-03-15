@@ -16,10 +16,10 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
+import se.goransson.qatja.MQTTException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import se.goransson.qatja.MQTTException;
 
 /**
  * MQTT {@link #DISCONNECT} message

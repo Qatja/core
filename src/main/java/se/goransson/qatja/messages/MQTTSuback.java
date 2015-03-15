@@ -16,9 +16,9 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import java.io.IOException;
-
 import se.goransson.qatja.MQTTException;
+
+import java.io.IOException;
 
 /**
  * MQTT {@link #SUBACK} message, is the response to a {@link #SUBSCRIBE} message

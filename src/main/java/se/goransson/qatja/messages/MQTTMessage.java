@@ -16,14 +16,10 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
+import se.goransson.qatja.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import se.goransson.qatja.MQTTConnectionConstants;
-import se.goransson.qatja.MQTTConstants;
-import se.goransson.qatja.MQTTException;
-import se.goransson.qatja.MQTTHelper;
-import se.goransson.qatja.MQTTVersion;
 
 /**
  * MQTT Message super class, should never be instantiated.
