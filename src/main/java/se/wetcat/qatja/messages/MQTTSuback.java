@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -16,36 +16,27 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.MQTTException;
-import se.goransson.qatja.MQTTHelper;
+import se.wetcat.qatja.MQTTException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * MQTT {@link #PUBCOMP} message (publish complete) is the response to a
- * {@link #PUBREL} message. It is the fourth and final message of the
- * {@link #EXACTLY_ONCE} protocol flow.
+ * MQTT {@link #SUBACK} message, is the response to a {@link #SUBSCRIBE} message
  *
  * @author andreas
  *
  */
-public class MQTTPubcomp extends MQTTMessage {
-
-    public MQTTPubcomp(int packageIdentifier) {
-        setType(PUBCOMP);
-        setPackageIdentifier(packageIdentifier);
-    }
+public class MQTTSuback extends MQTTMessage {
 
     /**
-     * Construct a {@link #PUBCOMP} message from a byte array
+     * Construct a {@link #SUBACK} message from a buffer
      *
      * @param buffer
-     *            the byte array
+     *            the buffer
      * @param bufferLength
-     *            the length of the byte array
+     *            the buffer length
      */
-    public MQTTPubcomp(byte[] buffer, int bufferLength) {
+    public MQTTSuback(byte[] buffer, int bufferLength) {
 
         // setBuffer(bufferIn, bufferLength);
 
@@ -64,9 +55,7 @@ public class MQTTPubcomp extends MQTTMessage {
         } while ((digit & 128) != 0);
         this.setRemainingLength(len);
 
-        // No flags for PUBBCOMP
-
-        // Get variable header (always length 2 in PUBACK)
+        // Get variable header (always length 2 in SUBACK)
         variableHeader = new byte[2];
         System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
 
@@ -83,44 +72,20 @@ public class MQTTPubcomp extends MQTTMessage {
 
     @Override
     protected byte[] generateFixedHeader() throws MQTTException, IOException {
-        // FIXED HEADER
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        // Type and PUBACK flags, reserved bits MUST be [0,0,0,0]
-        byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2)
-                | (0x00 << 1) | (0x00) << 0);
-        out.write(fixed);
-
-        // Flags (none for PUBACK)
-
-        // Remaining length
-        int length = getVariableHeader().length + getPayload().length;
-        this.setRemainingLength(length);
-        do {
-            byte digit = (byte) (length % 128);
-            length /= 128;
-            if (length > 0)
-                digit = (byte) (digit | 0x80);
-            out.write(digit);
-        } while (length > 0);
-
-        return out.toByteArray();
+        // Client doesn't create SUBACK
+        return null;
     }
 
     @Override
     protected byte[] generateVariableHeader() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        out.write(MQTTHelper.MSB(packageIdentifier));
-        out.write(MQTTHelper.LSB(packageIdentifier));
-
-        return out.toByteArray();
+        // Client doesn't create SUBACK
+        return null;
     }
 
     @Override
     protected byte[] generatePayload() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        return out.toByteArray();
+        // Client doesn't create SUBACK
+        return null;
     }
 
 }

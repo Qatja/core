@@ -1,7 +1,7 @@
-package se.goransson.qatja;
+package se.wetcat.qatja;
 
 /*
- * Copyright (C) 2012 Andreas Goransson, David Cuartielles
+ * Copyright (C) 2014 Andreas Goransson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,27 @@ package se.goransson.qatja;
  */
 
 /**
- * Defines the current MQTT version.
+ * MQTT Exception, defines a specific error according to MQTT rules
  *
  * @author andreas
  *
  */
-public interface MQTTVersion {
+public class MQTTException extends Exception {
 
-    /** MQTT 3.1 Version name */
-    static String NAME_31 = "MQIsdp";
-    /** MQTT 3.1 Version number */
-    static byte VERSION_31 = (byte) 0x03;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6482564182049683857L;
 
-    /** MQTT 3.1.1 Version name */
-    static String NAME_311 = "MQTT";
-    /** MQTT 3.1 Version number */
-    static byte VERSION_311 = (byte) 0x04;
+    public MQTTException() {
+        super("MQTT Exception");
+    }
+
+    public MQTTException(String message) {
+        super(message);
+    }
+
+    public MQTTException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 }

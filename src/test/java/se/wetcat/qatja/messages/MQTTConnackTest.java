@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 import junit.framework.TestCase;
 

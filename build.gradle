@@ -1,17 +1,16 @@
 apply plugin: 'java'
+//apply plugin: 'maven'
 
-version = '1.0'
+version = 'v0.1.1-alpha'
 
 sourceCompatibility = 1.5
 
-//create a single Jar with all dependencies
-task fatJar(type: Jar) {
+jar {
+    archiveName = "qatja.jar"
+
     manifest {
-        attributes 'Implementation-Title': 'Qatja', 'Implementation-Version': version
+        attributes("Implementation-Title": "Gradle", "Implementation-Version": version)
     }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
 
 repositories {
@@ -23,3 +22,17 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+/*
+uploadArchives {
+    repositories.mavenDeployer {
+        def deployPath = file(getProperty('aar.deployPath'))
+        repository(url: "file://${deployPath.absolutePath}")
+        pom.project {
+            groupId 'se.wetcat'
+            artifactId 'qatja'
+            version "1.0.0"
+        }
+    }
+}
+*/

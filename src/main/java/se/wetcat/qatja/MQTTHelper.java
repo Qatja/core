@@ -1,4 +1,4 @@
-package se.goransson.qatja;
+package se.wetcat.qatja;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -17,7 +17,7 @@ package se.goransson.qatja;
  */
 
 import org.mozilla.universalchardet.UniversalDetector;
-import se.goransson.qatja.messages.MQTTMessage;
+import se.wetcat.qatja.messages.MQTTMessage;
 
 /**
  * Helper methods for MQTT

@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -16,41 +16,33 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.MQTTException;
-import se.goransson.qatja.MQTTHelper;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * MQTT {@link #PUBREC} message is the response to a {@link #PUBLISH} message.
- * It is the second packet of the {@link #EXACTLY_ONCE} flow
+ * MQTT {@link #PUBREL} message is the reponse to a {@link #PUBREC} message. It
+ * is the third message of the {@link #EXACTLY_ONCE} flow
  *
  * @author andreas
  *
  */
-public class MQTTPubrec extends MQTTMessage {
+public class MQTTPubrel extends MQTTMessage {
 
     /**
-     * Construct a {@link #PUBREC} message
+     * Construct a {@link #PUBREL} message
      *
      * @param packageIdentifier
      *            the package identifier
      */
-    public MQTTPubrec(int packageIdentifier) {
-        setType(PUBREC);
+    public MQTTPubrel(int packageIdentifier) {
+        setType(PUBREL);
         setPackageIdentifier(packageIdentifier);
     }
 
-    /**
-     * Construct a {@link #PUBREC} message from a buffer
-     *
-     * @param buffer
-     *            the buffer
-     * @param bufferLength
-     *            the buffer length
-     */
-    public MQTTPubrec(byte[] buffer, int bufferLength) {
+    public MQTTPubrel(byte[] buffer, int bufferLength) {
 
         // setBuffer(bufferIn, bufferLength);
 
@@ -70,7 +62,7 @@ public class MQTTPubrec extends MQTTMessage {
         } while ((digit & 128) != 0);
         this.setRemainingLength(len);
 
-        // Get variable header always 2 (just the pkg id) for PUBREC
+        // Get variable header always 2 (just the pkg id) for PUBREL
         variableHeader = new byte[2];
 
         // We have to step back two bytes since
@@ -92,12 +84,12 @@ public class MQTTPubrec extends MQTTMessage {
         // FIXED HEADER
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        // Type and PUBREC flags, reserved bits MUST be [0,0,0,0]
+        // Type and PUBLISH flags (The last four bits MUST be [0 0 1 0])
         byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2)
-                | (0x00 << 1) | (0x00) << 0);
+                | (0x01 << 1) | (0x00 << 0));
         out.write(fixed);
 
-        // Flags (none for PUBREC)
+        // Flags (none for PUBREL)
 
         // Remaining length
         int length = getVariableHeader().length + getPayload().length;
@@ -117,8 +109,8 @@ public class MQTTPubrec extends MQTTMessage {
     protected byte[] generateVariableHeader() throws MQTTException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        out.write(MQTTHelper.MSB(packageIdentifier));
-        out.write(MQTTHelper.LSB(packageIdentifier));
+        out.write(MQTTHelper.MSB(getPackageIdentifier()));
+        out.write(MQTTHelper.LSB(getPackageIdentifier()));
 
         return out.toByteArray();
     }

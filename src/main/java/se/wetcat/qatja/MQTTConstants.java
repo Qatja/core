@@ -1,4 +1,4 @@
-package se.goransson.qatja;
+package se.wetcat.qatja;
 
 /*
  * Copyright (C) 2012 Andreas Goransson, David Cuartielles

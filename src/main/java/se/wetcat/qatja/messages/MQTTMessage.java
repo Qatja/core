@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2012 Andreas Goransson, David Cuartielles
@@ -16,7 +16,7 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.*;
+import se.wetcat.qatja.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

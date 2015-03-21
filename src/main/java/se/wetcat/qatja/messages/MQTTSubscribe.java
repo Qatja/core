@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -16,67 +16,37 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.MQTTException;
-import se.goransson.qatja.MQTTHelper;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * MQTT {@link #PUBREL} message is the reponse to a {@link #PUBREC} message. It
- * is the third message of the {@link #EXACTLY_ONCE} flow
+ * MQTT {@link #SUBSCRIBE} message
  *
  * @author andreas
  *
  */
-public class MQTTPubrel extends MQTTMessage {
+public class MQTTSubscribe extends MQTTMessage {
+
+    private String[] topicFilters;
+    private byte[] QoSs;
 
     /**
-     * Construct a {@link #PUBREL} message
+     * Construct a {@link #SUBSCRIBE} message
      *
-     * @param packageIdentifier
-     *            the package identifier
+     * @param topicFilters
+     *            the topics to subscribe to
+     * @param QoSs
+     *            the QoS for each topic
      */
-    public MQTTPubrel(int packageIdentifier) {
-        setType(PUBREL);
-        setPackageIdentifier(packageIdentifier);
-    }
+    public MQTTSubscribe(String[] topicFilters, byte[] QoSs) {
+        this.setType(SUBSCRIBE);
+        this.topicFilters = topicFilters;
+        this.QoSs = QoSs;
 
-    public MQTTPubrel(byte[] buffer, int bufferLength) {
-
-        // setBuffer(bufferIn, bufferLength);
-
-        int i = 0;
-
-        // Type (just for clarity sake we'll set it...)
-        this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
-
-        // Remaining length
-        int multiplier = 1;
-        int len = 0;
-        byte digit = 0;
-        do {
-            digit = buffer[i++];
-            len += (digit & 127) * multiplier;
-            multiplier *= 128;
-        } while ((digit & 128) != 0);
-        this.setRemainingLength(len);
-
-        // Get variable header always 2 (just the pkg id) for PUBREL
-        variableHeader = new byte[2];
-
-        // We have to step back two bytes since
-        System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
-
-        // Get payload
-        payload = new byte[remainingLength - variableHeader.length];
-
-        if (payload.length > 0)
-            System.arraycopy(buffer, i, payload, 0, payload.length);
-
-        // Only get package identifier if the QoS is above AT_MOST_ONCE
-        packageIdentifier = (variableHeader[variableHeader.length - 1])
-                | (variableHeader[variableHeader.length - 2]);
+        setPackageIdentifier(MQTTHelper.getNewPackageIdentifier());
     }
 
     @Override
@@ -84,12 +54,12 @@ public class MQTTPubrel extends MQTTMessage {
         // FIXED HEADER
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        // Type and PUBLISH flags (The last four bits MUST be [0 0 1 0])
+        // Type and reserved bits, MUST be [0 0 1 0]
         byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2)
                 | (0x01 << 1) | (0x00 << 0));
         out.write(fixed);
 
-        // Flags (none for PUBREL)
+        // Flags (none for SUBSCRIBE)
 
         // Remaining length
         int length = getVariableHeader().length + getPayload().length;
@@ -118,7 +88,41 @@ public class MQTTPubrel extends MQTTMessage {
     @Override
     protected byte[] generatePayload() throws MQTTException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        if (topicFilters.length <= 0 || QoSs.length <= 0)
+            throw new MQTTException(
+                    "The SUBSCRIBE message must contain at least one topic filter and QoS pair");
+
+        if (topicFilters.length != QoSs.length)
+            throw new MQTTException(
+                    "The SUBSCRIBE message should have the same number of topic filters and QoS");
+
+        for (int i = 0; i < topicFilters.length; i++) {
+            if (MQTTHelper.isUTF8(topicFilters[i].getBytes("UTF-8")))
+                throw new MQTTException("Invalid topic filter encoding: "
+                        + topicFilters[i]);
+
+            out.write(MQTTHelper.MSB(topicFilters[i].length()));
+            out.write(MQTTHelper.LSB(topicFilters[i].length()));
+            out.write(topicFilters[i].getBytes());
+            out.write(QoSs[i]);
+        }
+
         return out.toByteArray();
+    }
+
+    /**
+     * @return the topicFilters
+     */
+    public String[] getTopicFilters() {
+        return topicFilters;
+    }
+
+    /**
+     * @return the qoSs
+     */
+    public byte[] getQoSs() {
+        return QoSs;
     }
 
 }

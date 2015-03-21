@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -16,28 +16,32 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.MQTTException;
+import se.wetcat.qatja.MQTTException;
 
 import java.io.IOException;
 
 /**
- * MQTT {@link #CONNACK} message
+ * MQTT {@link #PINGRESP} message is the response to a {@link #PINGREQ} message
  *
  * @author andreas
  *
  */
-public class MQTTConnack extends MQTTMessage {
+public class MQTTPingresp extends MQTTMessage {
 
-    @SuppressWarnings("unused")
-    private byte RESERVED;
-    private byte returnCode;
+    /**
+     * Construct a {@link #PINGRESP} message from a buffer
+     *
+     * @param buffer
+     *            the buffer
+     * @param bufferLength
+     *            the buffer length
+     */
+    public MQTTPingresp(byte[] buffer, int bufferLength) {
 
-    public MQTTConnack(byte[] buffer, int bufferLength) {
-
-        // setBuffer(buffer, bufferLength);
+        // setBuffer(bufferIn, bufferLength);
 
         int i = 0;
-        // Type (just for clarity sake we'll set it...)
+        // Type (just for clarity sake we'll read it...)
         this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
 
         // Remaining length
@@ -51,45 +55,28 @@ public class MQTTConnack extends MQTTMessage {
         } while ((digit & 128) != 0);
         this.setRemainingLength(len);
 
-        // Get length of protocol name
-        len = ((buffer[i] >> 8) & 0xFF) | (buffer[i + 1] & 0xFF);
+        // No variable header
+        variableHeader = new byte[0];
 
-        // Get variable header (always length 2 in CONNACK)
-        variableHeader = new byte[2];
-        System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
-
-        // Get payload
-        payload = new byte[remainingLength - variableHeader.length];
-        if (payload.length > 0)
-            System.arraycopy(buffer, i + variableHeader.length, payload, 0,
-                    remainingLength - variableHeader.length);
-
-        RESERVED = variableHeader[0];
-        returnCode = variableHeader[1];
-    }
-
-    /**
-     * @return the returnCode
-     */
-    public byte getReturnCode() {
-        return returnCode;
+        // No payload
+        payload = new byte[0];
     }
 
     @Override
     protected byte[] generateFixedHeader() throws MQTTException, IOException {
-        // Client doesn't generate CONNACK
+        // Client doesn't create the PINGRESP
         return null;
     }
 
     @Override
     protected byte[] generateVariableHeader() throws MQTTException, IOException {
-        // Client doesn't generate CONNACK
+        // Client doesn't create the PINGRESP
         return null;
     }
 
     @Override
     protected byte[] generatePayload() throws MQTTException, IOException {
-        // Client doesn't generate CONNACK
+        // Client doesn't create the PINGRESP
         return null;
     }
 

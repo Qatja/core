@@ -1,1 +1,18 @@
 language: java
+jdk: oraclejdk7
+
+env:
+  global:
+  - LIB_FILE=/home/travis/build/build/libs/qatja.jar
+
+deploy:
+  provider: releases
+  api_key:
+    secure: qMXfuiHiTILfMxHtrqkdsjyX74/YXKKzjM5ej+XLv85B0td3qyT9ogu1rD97zw41UIkwsGLcvH0ZqFJ448zddC5nNDOx3M0Spi/GKbmg5xNnCuLxg1k9URnLqdGbnTbxzhO7k/R09sMFH3EmoYNRNLIvHSFG1sUqvzUJbG40d9I=
+  file: $LIB_FILE
+  on:
+    repo: Qatja/Qatja
+    tags: true
+
+script:
+  - ./gradlew clean compileJava jar

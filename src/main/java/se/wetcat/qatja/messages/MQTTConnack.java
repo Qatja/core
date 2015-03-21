@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -16,29 +16,25 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.MQTTException;
+import se.wetcat.qatja.MQTTException;
 
 import java.io.IOException;
 
 /**
- * MQTT {@link #SUBACK} message, is the response to a {@link #SUBSCRIBE} message
+ * MQTT {@link #CONNACK} message
  *
  * @author andreas
  *
  */
-public class MQTTSuback extends MQTTMessage {
+public class MQTTConnack extends MQTTMessage {
 
-    /**
-     * Construct a {@link #SUBACK} message from a buffer
-     *
-     * @param buffer
-     *            the buffer
-     * @param bufferLength
-     *            the buffer length
-     */
-    public MQTTSuback(byte[] buffer, int bufferLength) {
+    @SuppressWarnings("unused")
+    private byte RESERVED;
+    private byte returnCode;
 
-        // setBuffer(bufferIn, bufferLength);
+    public MQTTConnack(byte[] buffer, int bufferLength) {
+
+        // setBuffer(buffer, bufferLength);
 
         int i = 0;
         // Type (just for clarity sake we'll set it...)
@@ -55,7 +51,10 @@ public class MQTTSuback extends MQTTMessage {
         } while ((digit & 128) != 0);
         this.setRemainingLength(len);
 
-        // Get variable header (always length 2 in SUBACK)
+        // Get length of protocol name
+        len = ((buffer[i] >> 8) & 0xFF) | (buffer[i + 1] & 0xFF);
+
+        // Get variable header (always length 2 in CONNACK)
         variableHeader = new byte[2];
         System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
 
@@ -65,26 +64,32 @@ public class MQTTSuback extends MQTTMessage {
             System.arraycopy(buffer, i + variableHeader.length, payload, 0,
                     remainingLength - variableHeader.length);
 
-        // Get package identifier
-        packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF)
-                | (variableHeader[variableHeader.length - 1] & 0xFF);
+        RESERVED = variableHeader[0];
+        returnCode = variableHeader[1];
+    }
+
+    /**
+     * @return the returnCode
+     */
+    public byte getReturnCode() {
+        return returnCode;
     }
 
     @Override
     protected byte[] generateFixedHeader() throws MQTTException, IOException {
-        // Client doesn't create SUBACK
+        // Client doesn't generate CONNACK
         return null;
     }
 
     @Override
     protected byte[] generateVariableHeader() throws MQTTException, IOException {
-        // Client doesn't create SUBACK
+        // Client doesn't generate CONNACK
         return null;
     }
 
     @Override
     protected byte[] generatePayload() throws MQTTException, IOException {
-        // Client doesn't create SUBACK
+        // Client doesn't generate CONNACK
         return null;
     }
 

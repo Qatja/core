@@ -1,4 +1,4 @@
-package se.goransson.qatja.messages;
+package se.wetcat.qatja.messages;
 
 /*
  * Copyright (C) 2014 Andreas Goransson
@@ -16,35 +16,37 @@ package se.goransson.qatja.messages;
  * limitations under the License.
  */
 
-import se.goransson.qatja.MQTTException;
-import se.goransson.qatja.MQTTHelper;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
+import se.wetcat.qatja.MQTTConstants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * MQTT {@link #PUBACK} message is the response to a {@link #PUBLISH} message
- * with QoS level {@link #AT_LEAST_ONCE}
+ * MQTT {@link #PUBCOMP} message (publish complete) is the response to a
+ * {@link #PUBREL} message. It is the fourth and final message of the
+ * {@link #EXACTLY_ONCE} protocol flow.
  *
  * @author andreas
  *
  */
-public class MQTTPuback extends MQTTMessage {
+public class MQTTPubcomp extends MQTTMessage {
 
-    public MQTTPuback(int packageIdentifier) {
-        this.setType(PUBACK);
-        this.setPackageIdentifier(packageIdentifier);
+    public MQTTPubcomp(int packageIdentifier) {
+        setType(MQTTConstants.PUBCOMP);
+        setPackageIdentifier(packageIdentifier);
     }
 
     /**
-     * Construct a {@link #PUBACK} message from a byte array
+     * Construct a {@link #PUBCOMP} message from a byte array
      *
      * @param buffer
      *            the byte array
      * @param bufferLength
      *            the length of the byte array
      */
-    public MQTTPuback(byte[] buffer, int bufferLength) {
+    public MQTTPubcomp(byte[] buffer, int bufferLength) {
 
         // setBuffer(bufferIn, bufferLength);
 
@@ -62,6 +64,8 @@ public class MQTTPuback extends MQTTMessage {
             multiplier *= 128;
         } while ((digit & 128) != 0);
         this.setRemainingLength(len);
+
+        // No flags for PUBBCOMP
 
         // Get variable header (always length 2 in PUBACK)
         variableHeader = new byte[2];
