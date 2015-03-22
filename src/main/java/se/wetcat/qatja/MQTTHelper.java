@@ -23,7 +23,6 @@ import se.wetcat.qatja.messages.MQTTMessage;
  * Helper methods for MQTT
  *
  * @author andreas
- *
  */
 public class MQTTHelper implements MQTTConstants {
 
@@ -34,8 +33,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Detects if string is encoded with UTF-8
      *
-     * @param buffer
-     *            String
+     * @param buffer String
      * @return true if UTF-8, false otherwise
      */
     public static boolean isUTF8(byte[] buffer) {
@@ -62,8 +60,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Return the MSB of a string length
      *
-     * @param buffer
-     *            String
+     * @param buffer String
      * @return MSB
      */
     public static byte MSB(byte[] buffer) {
@@ -73,8 +70,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Return the LSB of the string length
      *
-     * @param buffer
-     *            String
+     * @param buffer String
      * @return LSB
      */
     public static byte LSB(byte[] buffer) {
@@ -84,8 +80,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Return most significant byte of integer
      *
-     * @param val
-     *            the value
+     * @param val the value
      * @return the MSB
      */
     public static byte MSB(int val) {
@@ -95,8 +90,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Return least significant byte of integer
      *
-     * @param val
-     *            the value
+     * @param val the value
      * @return the LSB
      */
     public static byte LSB(int val) {
@@ -115,7 +109,7 @@ public class MQTTHelper implements MQTTConstants {
      * Decode message type
      *
      * @param buffer
-     * @return
+     * @return The message type
      */
     public static byte decode(byte[] buffer) {
         return (byte) ((buffer[0] >> 4) & 0x0F);
@@ -124,8 +118,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Get the human readable name of a message type
      *
-     * @param messageType
-     *            the message type
+     * @param messageType the message type
      * @return human readable string of message type
      */
     public static String decodePackageName(byte messageType) {
@@ -166,8 +159,7 @@ public class MQTTHelper implements MQTTConstants {
     /**
      * Get the human readable name of a message type
      *
-     * @param message
-     *            the message
+     * @param message the message
      * @return human readable string of message type
      */
     public static String decodePackageName(MQTTMessage message) {
