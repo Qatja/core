@@ -3,6 +3,7 @@
 *.iml
 
 # Build dir
+.gradle
 build/
 
 ## Directory-based project format:
@@ -22,8 +23,8 @@ build/
 # .idea/uiDesigner.xml
 
 # Gradle:
-# .idea/gradle.xml
-# .idea/libraries
+.idea/gradle.xml
+.idea/libraries
 
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
