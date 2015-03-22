@@ -3,7 +3,7 @@ jdk: oraclejdk7
 
 env:
   global:
-  - LIB_FILE=/home/travis/build/libs/qatja.jar
+  - LIB_FILE=qatja.jar
 
 deploy:
   provider: releases
