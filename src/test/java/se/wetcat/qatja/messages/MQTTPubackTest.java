@@ -1,7 +1,7 @@
-package se.wetcat.qatja;
+package se.wetcat.qatja.messages;
 
 /*
- * Copyright (C) 2014 Andreas Goransson
+ * Copyright (C) 2017 Andreas Goransson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,33 @@ package se.wetcat.qatja;
  * limitations under the License.
  */
 
-/**
- * MQTT Exception, defines a specific error according to MQTT rules
- *
- * @author  Andreas Goransson
- * @version 1.0.0
- * @since   2017-05-07
- */
-public class MQTTException extends Exception {
+import static org.junit.Assert.assertEquals;
 
-  public MQTTException() {
-    super("MQTT Exception");
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static se.wetcat.qatja.MQTTConstants.PUBACK;
+
+public class MQTTPubackTest {
+
+  private MQTTPuback msg;
+
+  @Before
+  public void setup() {
+    msg = new MQTTPuback(2);
   }
 
-  public MQTTException(String message) {
-    super(message);
+  @After
+  public void teardown() {
+    msg = null;
   }
 
-  public MQTTException(String message, Throwable throwable) {
-    super(message, throwable);
+  @Test
+  public void testType() {
+    byte expected = PUBACK;
+    byte actual = msg.getType();
+    assertEquals(expected, actual);
   }
 
 }

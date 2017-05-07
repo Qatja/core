@@ -18,19 +18,35 @@ package se.wetcat.qatja;
 
 /**
  * Defines the current MQTT version.
+ * 
+ * TODO: Find a better way of defining versions, defining a version should also
+ * affect the other classes of the project - and the specific platform 
+ * implementations.
  *
- * @author andreas
- *
+ * @author  Andreas Goransson
+ * @version 1.0.0
+ * @since   2017-05-07
  */
-public interface MQTTVersion {
+public class MQTTVersion {
 
-    /** MQTT 3.1 Version name */
-    static String NAME_31 = "MQIsdp";
-    /** MQTT 3.1 Version number */
-    static byte VERSION_31 = (byte) 0x03;
+    /**
+     * MQTT 3.1 Version name
+     */
+    public static String NAME_31 = "MQIsdp";
 
-    /** MQTT 3.1.1 Version name */
-    static String NAME_311 = "MQTT";
-    /** MQTT 3.1 Version number */
-    static byte VERSION_311 = (byte) 0x04;
+    /**
+     * MQTT 3.1 Version number
+     */
+    public static byte VERSION_31 = (byte) 0x03;
+
+    /**
+     * MQTT 3.1.1 Version name
+     */
+    public static String NAME_311 = "MQTT";
+
+    /**
+     * MQTT 3.1 Version number
+     */
+    public static byte VERSION_311 = (byte) 0x04;
+
 }
