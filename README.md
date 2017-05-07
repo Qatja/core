@@ -1,7 +1,7 @@
 Qatja
 =====
 
-[![Build Status](https://travis-ci.org/Qatja/Qatja.svg?branch=master)](https://travis-ci.org/Qatja/Qatja)
+[![Build Status](https://travis-ci.org/Qatja/Qatja.svg?branch=develop)](https://travis-ci.org/Qatja/Qatja)
 
 
 Java MQTT client library, conforms to MQTT 3.1.1
