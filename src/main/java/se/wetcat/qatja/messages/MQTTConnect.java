@@ -22,6 +22,12 @@ import se.wetcat.qatja.MQTTHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.AT_MOST_ONCE;
+import static se.wetcat.qatja.MQTTConstants.CONNECT;
+import static se.wetcat.qatja.MQTTConstants.MIN_LENGTH;
+import static se.wetcat.qatja.MQTTConstants.MAX_LENGTH;
+import static se.wetcat.qatja.MQTTVersion.VERSION_311;
+
 /**
  * After a Network Connection is established by a Client to a Server, the first
  * Packet sent from the Client to the Server MUST be a {@link #CONNECT} Packet
@@ -38,7 +44,7 @@ import java.io.IOException;
  * determined based on flags in the variable header.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTConnect extends MQTTMessage {

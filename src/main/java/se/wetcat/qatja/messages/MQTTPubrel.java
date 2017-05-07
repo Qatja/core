@@ -22,12 +22,14 @@ import se.wetcat.qatja.MQTTHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.PUBREL;
+
 /**
  * A {@link #PUBREL} Packet is the response to a {@link #PUBREC} Packet. It is
  * the third packet of the {@link #EXACTLY_ONCE} protocol exchange.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-07
  */
 public class MQTTPubrel extends MQTTMessage {

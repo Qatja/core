@@ -29,7 +29,7 @@ import java.io.IOException;
  * by the {@link #SUBSCRIBE}.
  * 
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-07
  */
 public class MQTTSuback extends MQTTMessage {

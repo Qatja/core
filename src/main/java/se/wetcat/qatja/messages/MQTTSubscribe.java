@@ -22,6 +22,8 @@ import se.wetcat.qatja.MQTTHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.SUBSCRIBE;
+
 /**
  * The {@link #SUBSCRIBE} Packet is sent from the Client to the Server to create
  * one or more Subscriptions. Each Subscription registers a Client’s interest in
@@ -32,7 +34,7 @@ import java.io.IOException;
  * Messages to the Client.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-07
  */
 public class MQTTSubscribe extends MQTTMessage {

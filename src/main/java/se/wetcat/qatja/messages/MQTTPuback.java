@@ -22,12 +22,14 @@ import se.wetcat.qatja.MQTTHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.PUBACK;
+
 /**
  * A {@link #PUBACK} Packet is the response to a {@link #PUBLISH} Packet with
  * QoS level {@link #AT_LEAST_ONCE}.
  * 
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTPuback extends MQTTMessage {

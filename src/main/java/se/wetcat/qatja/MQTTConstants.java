@@ -20,143 +20,143 @@ package se.wetcat.qatja;
  * Defines all MQTT constants; including message types, quality of service, etc.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
-public interface MQTTConstants {
+public class MQTTConstants {
 
   /**
    * Client request to connect to a server
    */
-  static final byte CONNECT = 0x01;
+  public static final byte CONNECT = 0x01;
 
   /** 
    * Connect Acknowledgement
    */
-  static final byte CONNACK = 0x02;
+  public static final byte CONNACK = 0x02;
 
   /**
    * Publish message
    */
-  static final byte PUBLISH = 0x03;
+  public static final byte PUBLISH = 0x03;
 
   /**
    * Publish Acknowledgment
    */
-  static final byte PUBACK = 0x04;
+  public static final byte PUBACK = 0x04;
 
   /**
    * Publish Received
    */
-  static final byte PUBREC = 0x05;
+  public static final byte PUBREC = 0x05;
 
   /**
    * Publish Release
    */
-  static final byte PUBREL = 0x06;
+  public static final byte PUBREL = 0x06;
 
   /**
    * Publish Complete
    */
-  static final byte PUBCOMP = 0x07;
+  public static final byte PUBCOMP = 0x07;
 
   /**
    * Client Subscription request
    */
-  static final byte SUBSCRIBE = 0x08;
+  public static final byte SUBSCRIBE = 0x08;
 
   /**
    * Subscription Acknowledgment
    */
-  static final byte SUBACK = 0x09;
+  public static final byte SUBACK = 0x09;
 
   /**
    * Client Unsubscribe request
    */
-  static final byte UNSUBSCRIBE = 0x0a;
+  public static final byte UNSUBSCRIBE = 0x0a;
 
   /**
    * Unsubscribe Acknowledgment
    */
-  static final byte UNSUBACK = 0x0b;
+  public static final byte UNSUBACK = 0x0b;
 
   /**
    * PING Request
    */
-  static final byte PINGREQ = 0x0c;
+  public static final byte PINGREQ = 0x0c;
 
   /**
    * PING Response
    */
-  static final byte PINGRESP = 0x0d;
+  public static final byte PINGRESP = 0x0d;
 
   /**
    * Client is Disconnecting
    */
-  static final byte DISCONNECT = 0x0e;
+  public static final byte DISCONNECT = 0x0e;
 
   /**
    * Fire and Forget, QoS:0
    */
-  static final byte AT_MOST_ONCE = 0x00;
+  public static final byte AT_MOST_ONCE = 0x00;
 
   /**
    * Acknowledged deliver, QoS:1
    */
-  static final byte AT_LEAST_ONCE = 0x01;
+  public static final byte AT_LEAST_ONCE = 0x01;
 
   /**
    * Assured Delivery, QoS:2
    */
-  static final byte EXACTLY_ONCE = 0x02;
+  public static final byte EXACTLY_ONCE = 0x02;
 
   /**
    * Connection was accepted by server
    */
-  static final byte CONNECTION_ACCEPTED = 0x00;
+  public static final byte CONNECTION_ACCEPTED = 0x00;
 
   /**
    * The Server does not support the level of the MQTT protocol requested by the
    * Client
    */
-  static final byte CONNECTION_REFUSED_VERSION = 0x01;
+  public static final byte CONNECTION_REFUSED_VERSION = 0x01;
 
   /**
    * The Client identifier is correct UTF-8 but not allowed by the Server
    */
-  static final byte CONNECTION_REFUSED_IDENTIFIER = 0x02;
+  public static final byte CONNECTION_REFUSED_IDENTIFIER = 0x02;
 
   /**
    * The Network Connection has been made but the MQTT service is unavailable
    */
-  static final byte CONNECTION_REFUSED_SERVER = 0x03;
+  public static final byte CONNECTION_REFUSED_SERVER = 0x03;
 
   /**
    * The data in the user name or password is malformed
    */
-  static final byte CONNECTION_REFUSED_USER = 0x04;
+  public static final byte CONNECTION_REFUSED_USER = 0x04;
 
   /**
    * The Client is not authorized to connect
    */
-  static final byte CONNECTION_REFUSED_AUTH = 0x05;
+  public static final byte CONNECTION_REFUSED_AUTH = 0x05;
 
   /*
    * Subscription return codes
    */
-  static final byte SUBSCRIBE_SUCCESS_AT_MOST_ONCE = AT_MOST_ONCE;
-  static final byte SUBSCRIBE_SUCCESS_AT_LEAST_ONCE = AT_LEAST_ONCE;
-  static final byte SUBSCRIBE_SUCCESS_EXACTLY_ONCE = EXACTLY_ONCE;
-  static final byte SUBSCRIBE_FAILURE = (byte) 0x80;
+  public static final byte SUBSCRIBE_SUCCESS_AT_MOST_ONCE = AT_MOST_ONCE;
+  public static final byte SUBSCRIBE_SUCCESS_AT_LEAST_ONCE = AT_LEAST_ONCE;
+  public static final byte SUBSCRIBE_SUCCESS_EXACTLY_ONCE = EXACTLY_ONCE;
+  public static final byte SUBSCRIBE_FAILURE = (byte) 0x80;
 
   /**
    * Minimum length of strings (byte[] length)
    */
-  static final int MIN_LENGTH = 0;
+  public static final int MIN_LENGTH = 0;
 
   /**
    * Maximum length of strings (byte[] length)
    */
-  static final int MAX_LENGTH = 65535;
+  public static final int MAX_LENGTH = 65535;
 
 }

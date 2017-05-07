@@ -28,7 +28,7 @@ import java.io.IOException;
  * is the fourth and final packet of the {@link #EXACTLY_ONCE} protocol exchange
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTPubcomp extends MQTTMessage {

@@ -19,25 +19,22 @@ package se.wetcat.qatja;
 /**
  * MQTT Exception, defines a specific error according to MQTT rules
  *
- * @author andreas
- *
+ * @author  Andreas Goransson
+ * @version 1.0.0
+ * @since   2017-05-07
  */
 public class MQTTException extends Exception {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -6482564182049683857L;
+  public MQTTException() {
+    super("MQTT Exception");
+  }
 
-    public MQTTException() {
-        super("MQTT Exception");
-    }
+  public MQTTException(String message) {
+    super(message);
+  }
 
-    public MQTTException(String message) {
-        super(message);
-    }
+  public MQTTException(String message, Throwable throwable) {
+    super(message, throwable);
+  }
 
-    public MQTTException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
 }

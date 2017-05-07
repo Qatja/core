@@ -22,12 +22,17 @@ import se.wetcat.qatja.MQTTHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.AT_MOST_ONCE;
+import static se.wetcat.qatja.MQTTConstants.AT_LEAST_ONCE;
+import static se.wetcat.qatja.MQTTConstants.EXACTLY_ONCE;
+import static se.wetcat.qatja.MQTTConstants.PUBLISH;
+
 /**
  * A {@link #PUBLISH} Control Packet is sent from a Client to a Server or from
  * Server to a Client to transport an Application Message.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTPublish extends MQTTMessage {

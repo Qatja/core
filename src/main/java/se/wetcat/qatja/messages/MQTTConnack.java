@@ -31,7 +31,7 @@ import java.io.IOException;
  * and the communications infrastructure.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTConnack extends MQTTMessage {

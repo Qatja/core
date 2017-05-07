@@ -22,12 +22,14 @@ import se.wetcat.qatja.MQTTHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.UNSUBSCRIBE;
+
 /**
  * An {@link #UNSUBSCRIBE} Packet is sent by the Client to the Server, to
  * unsubscribe from topics.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-07
  */
 public class MQTTUnsubscribe extends MQTTMessage {

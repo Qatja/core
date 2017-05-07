@@ -28,7 +28,7 @@ import java.io.IOException;
  * It is the second packet of the {@link #EXACTLY_ONCE} flow
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTPubrec extends MQTTMessage {

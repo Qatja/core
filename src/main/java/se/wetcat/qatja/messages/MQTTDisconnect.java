@@ -21,12 +21,14 @@ import se.wetcat.qatja.MQTTException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.DISCONNECT;
+
 /**
  * The {@link #DISCONNECT} Packet is the final Control Packet sent from the 
  * Client to the Server. It indicates that the Client is disconnecting cleanly.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTDisconnect extends MQTTMessage {

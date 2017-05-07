@@ -21,6 +21,8 @@ import se.wetcat.qatja.MQTTException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTConstants.PINGREQ;
+
 /**
  * The {@link #PINGREQ}  Packet is sent from a Client to the Server. It can be
  * used to:
@@ -30,7 +32,7 @@ import java.io.IOException;
  * 3. Exercise the network to indicate that the Network Connection is active.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
 public class MQTTPingreq extends MQTTMessage {

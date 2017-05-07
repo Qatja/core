@@ -21,14 +21,17 @@ import se.wetcat.qatja.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static se.wetcat.qatja.MQTTVersion.VERSION_311;
+import static se.wetcat.qatja.MQTTVersion.NAME_311;
+
 /**
  * MQTT Message super class, should never be instantiated.
  *
  * @author  Andreas Goransson
- * @version 1.0
+ * @version 1.0.0
  * @since   2017-05-06
  */
-public abstract class MQTTMessage implements MQTTConstants, MQTTConnectionConstants, MQTTVersion {
+public abstract class MQTTMessage {
 
   protected byte flags;
 
