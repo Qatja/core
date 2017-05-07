@@ -1,4 +1,4 @@
-package se.wetcat.qatja.messages;
+package se.wetcat.qatja;
 
 /*
  * Copyright (C) 2017 Andreas Goransson
@@ -20,170 +20,170 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import se.wetcat.qatja.MQTTConstants;
+import static se.wetcat.qatja.MQTTConstants.*;
 
-public abstract class MQTTConstantsTest {
+public class MQTTConstantsTest {
 
   @Test
   public void testConnect() {
     byte expected = 1;
-    assertEquals(expected, MQTTConstants.CONNECT);
+    assertEquals(expected, CONNECT);
   }
 
   @Test
   public void testConnack() {
     byte expected = 2;
-    assertEquals(expected, MQTTConstants.CONNACK);
+    assertEquals(expected, CONNACK);
   }
 
   @Test
   public void testPublish() {
     byte expected = 3;
-    assertEquals(expected, MQTTConstants.PUBLISH);
+    assertEquals(expected, PUBLISH);
   }
 
   @Test
   public void testPuback() {
     byte expected = 4;
-    assertEquals(expected, MQTTConstants.PUBACK);
+    assertEquals(expected, PUBACK);
   }
 
   @Test
   public void testPubrec() {
     byte expected = 5;
-    assertEquals(expected, MQTTConstants.PUBREC);
+    assertEquals(expected, PUBREC);
   }
 
   @Test
   public void testPubrel() {
     byte expected = 6;
-    assertEquals(expected, MQTTConstants.PUBREL);
+    assertEquals(expected, PUBREL);
   }
 
   @Test
   public void testPubcomp() {
     byte expected = 7;
-    assertEquals(expected, MQTTConstants.PUBCOMP);
+    assertEquals(expected, PUBCOMP);
   }
 
   @Test
   public void testSubscribe() {
     byte expected = 8;
-    assertEquals(expected, MQTTConstants.SUBSCRIBE);
+    assertEquals(expected, SUBSCRIBE);
   }
 
   @Test
   public void testSuback() {
     byte expected = 9;
-    assertEquals(expected, MQTTConstants.SUBACK);
+    assertEquals(expected, SUBACK);
   }
 
   @Test
   public void testUnsubscribe() {
     byte expected = 10;
-    assertEquals(expected, MQTTConstants.UNSUBSCRIBE);
+    assertEquals(expected, UNSUBSCRIBE);
   }
 
   @Test
   public void testUnsuback() {
     byte expected = 11;
-    assertEquals(expected, MQTTConstants.UNSUBACK);
+    assertEquals(expected, UNSUBACK);
   }
 
   @Test
   public void testPingreq() {
     byte expected = 12;
-    assertEquals(expected, MQTTConstants.PINGREQ);
+    assertEquals(expected, PINGREQ);
   }
 
   @Test
   public void testPingresp() {
     byte expected = 13;
-    assertEquals(expected, MQTTConstants.PINGRESP);
+    assertEquals(expected, PINGRESP);
   }
 
   @Test
   public void testDisconnect() {
     byte expected = 14;
-    assertEquals(expected, MQTTConstants.DISCONNECT);
+    assertEquals(expected, DISCONNECT);
   }
 
   @Test
   public void testAtMostOnce() {
     byte expected = 0;
-    assertEquals(expected, MQTTConstants.AT_MOST_ONCE);
+    assertEquals(expected, AT_MOST_ONCE);
   }
 
   @Test
   public void testAtLeastOnce() {
     byte expected = 1;
-    assertEquals(expected, MQTTConstants.AT_LEAST_ONCE);
+    assertEquals(expected, AT_LEAST_ONCE);
   }
 
   @Test
   public void testExactlyOnce() {
     byte expected = 2;
-    assertEquals(expected, MQTTConstants.EXACTLY_ONCE);
+    assertEquals(expected, EXACTLY_ONCE);
   }
 
   @Test
   public void testConnectionAccepted() {
     byte expected = 0;
-    assertEquals(expected, MQTTConstants.CONNECTION_ACCEPTED);
+    assertEquals(expected, CONNECTION_ACCEPTED);
   }
 
   @Test
   public void testConnectionRefusedVersion() {
     byte expected = 1;
-    assertEquals(expected, MQTTConstants.CONNECTION_REFUSED_VERSION);
+    assertEquals(expected, CONNECTION_REFUSED_VERSION);
   }
 
   @Test
   public void testConnectionRefusedIdentifier() {
     byte expected = 2;
-    assertEquals(expected, MQTTConstants.CONNECTION_REFUSED_IDENTIFIER);
+    assertEquals(expected, CONNECTION_REFUSED_IDENTIFIER);
   }
 
   @Test
   public void testConnectionRefusedServer() {
     byte expected = 3;
-    assertEquals(expected, MQTTConstants.CONNECTION_REFUSED_SERVER);
+    assertEquals(expected, CONNECTION_REFUSED_SERVER);
   }
 
   @Test
   public void testConnectionRefusedUser() {
     byte expected = 4;
-    assertEquals(expected, MQTTConstants.CONNECTION_REFUSED_USER);
+    assertEquals(expected, CONNECTION_REFUSED_USER);
   }
 
   @Test
   public void testConnectionRefusedAuth() {
     byte expected = 5;
-    assertEquals(expected, MQTTConstants.CONNECTION_REFUSED_AUTH);
+    assertEquals(expected, CONNECTION_REFUSED_AUTH);
   }
 
   @Test
   public void testSubscribeSuccessAtMostOnce() {
     byte expected = 0;
-    assertEquals(expected, MQTTConstants.SUBSCRIBE_SUCCESS_AT_MOST_ONCE);
+    assertEquals(expected, SUBSCRIBE_SUCCESS_AT_MOST_ONCE);
   }
 
   @Test
   public void testSubscribeSuccessAtLeastOnce() {
     byte expected = 1;
-    assertEquals(expected, MQTTConstants.SUBSCRIBE_SUCCESS_AT_LEAST_ONCE);
+    assertEquals(expected, SUBSCRIBE_SUCCESS_AT_LEAST_ONCE);
   }
 
   @Test
   public void testSubscribeSuccessExactlyOnce() {
     byte expected = 2;
-    assertEquals(expected, MQTTConstants.SUBSCRIBE_SUCCESS_EXACTLY_ONCE);
+    assertEquals(expected, SUBSCRIBE_SUCCESS_EXACTLY_ONCE);
   }
 
   @Test
   public void testSubscribeFailure() {
-    byte expected = 80;
-    assertEquals(expected, MQTTConstants.SUBSCRIBE_FAILURE);
+    byte expected = (byte) 128;
+    assertEquals(expected, SUBSCRIBE_FAILURE);
   }
 
 }

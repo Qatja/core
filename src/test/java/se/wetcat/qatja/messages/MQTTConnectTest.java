@@ -24,14 +24,14 @@ import org.junit.Test;
 
 import static se.wetcat.qatja.MQTTConstants.CONNACK;
 
-public class MQTTConnackTest {
+public class MQTTConnectTest {
 
-  private MQTTConnack msg;
+  private MQTTPingresp msg;
 
   @Before
   public void setup() {
     byte[] buffer = { (1 << 5), (1 << 1), (0), (0) };
-    msg = new MQTTConnack(buffer, buffer.length);
+    msg = new MQTTPingresp(buffer, buffer.length);
   }
 
   @After

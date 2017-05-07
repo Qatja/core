@@ -134,52 +134,21 @@ public class MQTTHelper {
   /**
    * Get the human readable name of a message type
    *
-   * @param messageType the message type
+   * @param message the message
    * @return human readable string of message type
    */
-  public static String decodePackageName(byte messageType) {
-    switch (messageType) {
-    case CONNECT:
-      return "CONNECT";
-    case CONNACK:
-      return "CONNACK";
-    case PUBLISH:
-      return "PUBLISH";
-    case PUBACK:
-      return "PUBACK";
-    case PUBREC:
-      return "PUBREC";
-    case PUBREL:
-      return "PUBREL";
-    case PUBCOMP:
-      return "PUBCOMP";
-    case SUBSCRIBE:
-      return "SUBSCRIBE";
-    case SUBACK:
-      return "SUBACK";
-    case UNSUBSCRIBE:
-      return "UNSUBSCRIBE";
-    case UNSUBACK:
-      return "UNSUBACK";
-    case PINGREQ:
-      return "PINGREQ";
-    case PINGRESP:
-      return "PINGRESP";
-    case DISCONNECT:
-      return "DISCONNECT";
-    default:
-      return "Unknown message type";
-    }
+  public static String decodePackageName(MQTTMessage message) {
+    return decodePackageName(message.getType());
   }
 
   /**
    * Get the human readable name of a message type
    *
-   * @param message the message
+   * @param messageType the message type
    * @return human readable string of message type
    */
-  public static String decodePackageName(MQTTMessage message) {
-    switch (message.getType()) {
+  public static String decodePackageName(byte messageType) {
+    switch (messageType) {
     case CONNECT:
       return "CONNECT";
     case CONNACK:

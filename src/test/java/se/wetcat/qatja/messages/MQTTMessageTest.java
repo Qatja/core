@@ -20,10 +20,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import se.wetcat.qatja.MQTTConstants;
+import se.wetcat.qatja.messages.MQTTMessage;
+import static se.wetcat.qatja.MQTTConstants.PUBLISH;
 
 public class MQTTMessageTest {
 
@@ -50,7 +50,7 @@ public class MQTTMessageTest {
   private MQTTMessageStub msg;
 
   private static final byte TYPE = 0x06;
-  private static final int IDENTIFIER = MQTTConstants.PUBLISH;
+  private static final int IDENTIFIER = PUBLISH;
   private static final byte[] FIXED_HEADER = new byte[] { 0x03, 0x02, 0x01 };
   private static final byte[] VARIABLE_HEADER = new byte[] { 0x09, 0x08, 0x07 };
   private static final byte[] PAYLOAD = new byte[] { 0x06, 0x05, 0x04 };
