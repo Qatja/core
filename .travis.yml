@@ -1,5 +1,11 @@
+sudo: false
+
 language: java
-jdk: oraclejdk7
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk6
 
 script:
-  - ./gradlew build
+  - gradle build
