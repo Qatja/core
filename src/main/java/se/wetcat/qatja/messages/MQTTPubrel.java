@@ -45,7 +45,7 @@ public class MQTTPubrel extends MQTTMessage {
     setPackageIdentifier(packageIdentifier);
   }
 
-  public MQTTPubrel(byte[] buffer, int bufferLength) {
+  public MQTTPubrel(byte[] buffer) {
 
     int i = 0;
 

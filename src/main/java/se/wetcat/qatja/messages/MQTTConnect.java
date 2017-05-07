@@ -154,12 +154,11 @@ public class MQTTConnect extends MQTTMessage {
     this.cleanSession = cleanSession;
     this.keepAlive = keepAlive;
 
-    // Default flag values
     this.willRetain = willRetain;
     this.willFlag = (willTopic != null && willMessage != null);
     this.willTopic = willTopic;
     this.willMessage = willMessage;
-    this.willQoS = AT_MOST_ONCE;
+    this.willQoS = willQoS;
 
     this.username = username;
     this.password = password;

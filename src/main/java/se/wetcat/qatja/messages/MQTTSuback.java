@@ -39,10 +39,8 @@ public class MQTTSuback extends MQTTMessage {
    *
    * @param buffer
    *            The buffer
-   * @param bufferLength
-   *            The buffer length
    */
-  public MQTTSuback(byte[] buffer, int bufferLength) {
+  public MQTTSuback(byte[] buffer) {
 
     int i = 0;
     // Type (just for clarity sake we'll set it...)

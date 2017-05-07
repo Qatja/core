@@ -44,10 +44,8 @@ public class MQTTPuback extends MQTTMessage {
    *
    * @param buffer
    *            The byte array
-   * @param bufferLength
-   *            The length of the byte array
    */
-  public MQTTPuback(byte[] buffer, int bufferLength) {
+  public MQTTPuback(byte[] buffer) {
 
     int i = 0;
     // Type (just for clarity sake we'll set it...)

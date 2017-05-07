@@ -40,7 +40,7 @@ public class MQTTConnack extends MQTTMessage {
   private byte RESERVED;
   private byte returnCode;
 
-  public MQTTConnack(byte[] buffer, int bufferLength) {
+  public MQTTConnack(byte[] buffer) {
     int i = 0;
 
     // Type (just for clarity sake we'll set it...)

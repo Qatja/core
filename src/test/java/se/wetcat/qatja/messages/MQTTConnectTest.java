@@ -22,16 +22,27 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static se.wetcat.qatja.MQTTConstants.CONNACK;
+import static se.wetcat.qatja.MQTTConstants.CONNECT;
+import static se.wetcat.qatja.MQTTConstants.AT_LEAST_ONCE;;
 
 public class MQTTConnectTest {
 
-  private MQTTPingresp msg;
+  private MQTTConnect msg;
+
+  private static final String CLIENT_IDENTIFIER = "myIdentifier";
+  private static final String USERNAME = "theUsername";
+  private static final String PASSWORD = "thePassword";
+  private static final boolean WILL_RETAIN = true;
+  private static final byte WILL_QOS = AT_LEAST_ONCE;
+  private static final String WILL_TOPIC = "myWillTopic";
+  private static final String WILL_MESSAGE = "myWillMesssage";
+  private static final boolean CLEAN_SESSION = true;
+  private static final int KEEP_ALIVE = 30;
 
   @Before
   public void setup() {
-    byte[] buffer = { (1 << 5), (1 << 1), (0), (0) };
-    msg = new MQTTPingresp(buffer, buffer.length);
+    msg = new MQTTConnect(CLIENT_IDENTIFIER, USERNAME, PASSWORD, WILL_RETAIN, WILL_QOS, WILL_TOPIC, WILL_MESSAGE,
+        CLEAN_SESSION, KEEP_ALIVE);
   }
 
   @After
@@ -41,47 +52,54 @@ public class MQTTConnectTest {
 
   @Test
   public void testType() {
-    byte expected = CONNACK;
-
+    byte expected = CONNECT;
     byte actual = msg.getType();
-
     assertEquals(expected, actual);
   }
 
   @Test
-  public void testRemainingLength() {
-    int expected = 2;
-
-    int actual = msg.getRemainingLength();
-
-    assertEquals(expected, actual);
+  public void testIdentifier() {
+    assertEquals(CLIENT_IDENTIFIER, msg.getClientIdentifier());
   }
 
   @Test
-  public void testGenerateFixedHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateFixedHeader();
-
-    assertEquals(expected, actual);
+  public void testUsername() {
+    assertEquals(USERNAME, msg.getUsername());
   }
 
   @Test
-  public void testGenerateVariableHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateVariableHeader();
-
-    assertEquals(expected, actual);
+  public void testPassword() {
+    assertEquals(PASSWORD, msg.getPassword());
   }
 
   @Test
-  public void testGeneratePayload() throws Exception {
-    byte[] expected = null;
+  public void testWillRetain() {
+    assertEquals(WILL_RETAIN, msg.isWillRetain());
+  }
 
-    byte[] actual = msg.generatePayload();
+  @Test
+  public void testWillQos() {
+    assertEquals(WILL_QOS, msg.getWillQoS());
+  }
 
-    assertEquals(expected, actual);
+  @Test
+  public void testWillTopic() {
+    assertEquals(WILL_TOPIC, msg.getWillTopic());
+  }
+
+  @Test
+  public void testWillMessage() {
+    assertEquals(WILL_MESSAGE, msg.getWillMessage());
+  }
+
+  @Test
+  public void testCleanSession() {
+    assertEquals(CLEAN_SESSION, msg.isCleanSession());
+  }
+
+  @Test
+  public void testKeepAlive() {
+    assertEquals(KEEP_ALIVE, msg.getKeepAlive());
   }
 
 }

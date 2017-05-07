@@ -43,10 +43,8 @@ public class MQTTPubcomp extends MQTTMessage {
    *
    * @param buffer
    *            The byte array
-   * @param bufferLength
-   *            The length of the byte array
    */
-  public MQTTPubcomp(byte[] buffer, int bufferLength) {
+  public MQTTPubcomp(byte[] buffer) {
 
     // setBuffer(bufferIn, bufferLength);
 

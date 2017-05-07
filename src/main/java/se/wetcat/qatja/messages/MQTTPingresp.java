@@ -35,31 +35,21 @@ public class MQTTPingresp extends MQTTMessage {
    *
    * @param buffer
    *            The buffer
-   * @param bufferLength
-   *            The buffer length
    */
-  public MQTTPingresp(byte[] buffer, int bufferLength) {
+  public MQTTPingresp(byte[] buffer) {
 
     int i = 0;
     // Type (just for clarity sake we'll read it...)
     this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
 
     // Remaining length
-    int multiplier = 1;
-    int len = 0;
-    byte digit = 0;
-    do {
-      digit = buffer[i++];
-      len += (digit & 127) * multiplier;
-      multiplier *= 128;
-    } while ((digit & 128) != 0);
-    this.setRemainingLength(len);
+    this.setRemainingLength(0);
 
     // No variable header
-    variableHeader = new byte[0];
+    setVariableHeader(null);
 
     // No payload
-    payload = new byte[0];
+    setPayload(null);
   }
 
   @Override

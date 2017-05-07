@@ -22,16 +22,23 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static se.wetcat.qatja.MQTTConstants.CONNACK;
+import static se.wetcat.qatja.MQTTConstants.AT_LEAST_ONCE;
+import static se.wetcat.qatja.MQTTConstants.PUBLISH;;
 
-public class MQTTConnackTest {
+public class MQTTPublishTest {
 
-  private MQTTConnack msg;
+  private MQTTPublish msg;
+
+  private static final byte[] PAYLOAD = "this is a message".getBytes();
+  private static final byte QOS = AT_LEAST_ONCE;
+  private static final boolean RETAIN = true;
+  private static final String TOPIC = "my/test/topic/#";
 
   @Before
   public void setup() {
-    byte[] buffer = { (1 << 5), (1 << 1), (0), (0) };
-    msg = new MQTTConnack(buffer);
+    msg = new MQTTPublish(TOPIC, PAYLOAD, QOS);
+    msg.setDup();
+    msg.setRetain(RETAIN);
   }
 
   @After
@@ -41,46 +48,43 @@ public class MQTTConnackTest {
 
   @Test
   public void testType() {
-    byte expected = CONNACK;
-
+    byte expected = PUBLISH;
     byte actual = msg.getType();
-
     assertEquals(expected, actual);
   }
 
   @Test
-  public void testRemainingLength() {
-    int expected = 2;
-
-    int actual = msg.getRemainingLength();
-
+  public void testPayload() {
+    byte[] expected = PAYLOAD;
+    byte[] actual = msg.getPayload();
     assertEquals(expected, actual);
   }
 
   @Test
-  public void testGenerateFixedHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateFixedHeader();
-
+  public void testDup() {
+    boolean expected = true;
+    boolean actual = msg.isDup();
     assertEquals(expected, actual);
   }
 
   @Test
-  public void testGenerateVariableHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateVariableHeader();
-
+  public void testQos() {
+    byte expected = QOS;
+    byte actual = msg.getQoS();
     assertEquals(expected, actual);
   }
 
   @Test
-  public void testGeneratePayload() throws Exception {
-    byte[] expected = null;
+  public void testRetain() {
+    boolean expected = RETAIN;
+    boolean actual = msg.isRetain();
+    assertEquals(expected, actual);
+  }
 
-    byte[] actual = msg.generatePayload();
-
+  @Test
+  public void testTopic() {
+    String expected = TOPIC;
+    String actual = msg.getTopicName();
     assertEquals(expected, actual);
   }
 

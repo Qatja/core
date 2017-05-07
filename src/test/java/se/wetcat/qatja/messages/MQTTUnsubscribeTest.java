@@ -17,21 +17,25 @@ package se.wetcat.qatja.messages;
  */
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static se.wetcat.qatja.MQTTConstants.CONNACK;
+import static se.wetcat.qatja.MQTTConstants.AT_LEAST_ONCE;
+import static se.wetcat.qatja.MQTTConstants.EXACTLY_ONCE;
+import static se.wetcat.qatja.MQTTConstants.UNSUBSCRIBE;
 
-public class MQTTConnackTest {
+public class MQTTUnsubscribeTest {
 
-  private MQTTConnack msg;
+  private MQTTUnsubscribe msg;
+
+  private static final String[] TOPICS = { "home/+/sensors", "work/office/#" };
 
   @Before
   public void setup() {
-    byte[] buffer = { (1 << 5), (1 << 1), (0), (0) };
-    msg = new MQTTConnack(buffer);
+    msg = new MQTTUnsubscribe(TOPICS);
   }
 
   @After
@@ -41,47 +45,16 @@ public class MQTTConnackTest {
 
   @Test
   public void testType() {
-    byte expected = CONNACK;
-
+    byte expected = UNSUBSCRIBE;
     byte actual = msg.getType();
-
     assertEquals(expected, actual);
   }
 
   @Test
-  public void testRemainingLength() {
-    int expected = 2;
-
-    int actual = msg.getRemainingLength();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGenerateFixedHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateFixedHeader();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGenerateVariableHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateVariableHeader();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGeneratePayload() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generatePayload();
-
-    assertEquals(expected, actual);
+  public void testTopics() {
+    String[] expected = TOPICS;
+    String[] actual = msg.getTopicFilters();
+    assertArrayEquals(expected, actual);
   }
 
 }

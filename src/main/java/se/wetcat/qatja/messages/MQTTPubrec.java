@@ -49,10 +49,8 @@ public class MQTTPubrec extends MQTTMessage {
    *
    * @param buffer
    *            The buffer
-   * @param bufferLength
-   *            The buffer length
    */
-  public MQTTPubrec(byte[] buffer, int bufferLength) {
+  public MQTTPubrec(byte[] buffer) {
 
     int i = 0;
 

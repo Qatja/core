@@ -22,16 +22,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static se.wetcat.qatja.MQTTConstants.CONNACK;
+import static se.wetcat.qatja.MQTTConstants.PINGRESP;
 
-public class MQTTConnackTest {
+public class MQTTPingrespTest {
 
-  private MQTTConnack msg;
+  private MQTTPingresp msg;
 
   @Before
   public void setup() {
-    byte[] buffer = { (1 << 5), (1 << 1), (0), (0) };
-    msg = new MQTTConnack(buffer);
+    byte[] buffer = { (byte) 208 };
+    msg = new MQTTPingresp(buffer);
   }
 
   @After
@@ -41,46 +41,8 @@ public class MQTTConnackTest {
 
   @Test
   public void testType() {
-    byte expected = CONNACK;
-
+    byte expected = PINGRESP;
     byte actual = msg.getType();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testRemainingLength() {
-    int expected = 2;
-
-    int actual = msg.getRemainingLength();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGenerateFixedHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateFixedHeader();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGenerateVariableHeader() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generateVariableHeader();
-
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGeneratePayload() throws Exception {
-    byte[] expected = null;
-
-    byte[] actual = msg.generatePayload();
-
     assertEquals(expected, actual);
   }
 
