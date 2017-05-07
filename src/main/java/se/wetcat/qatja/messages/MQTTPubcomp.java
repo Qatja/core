@@ -24,104 +24,102 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * MQTT {@link #PUBCOMP} message (publish complete) is the response to a
- * {@link #PUBREL} message. It is the fourth and final message of the
- * {@link #EXACTLY_ONCE} protocol flow.
+ * The {@link #PUBCOMP} Packet is the response to a {@link #PUBREL} Packet. It
+ * is the fourth and final packet of the {@link #EXACTLY_ONCE} protocol exchange
  *
- * @author andreas
- *
+ * @author  Andreas Goransson
+ * @version 1.0
+ * @since   2017-05-06
  */
 public class MQTTPubcomp extends MQTTMessage {
 
-    public MQTTPubcomp(int packageIdentifier) {
-        setType(MQTTConstants.PUBCOMP);
-        setPackageIdentifier(packageIdentifier);
-    }
+  public MQTTPubcomp(int packageIdentifier) {
+    setType(MQTTConstants.PUBCOMP);
+    setPackageIdentifier(packageIdentifier);
+  }
 
-    /**
-     * Construct a {@link #PUBCOMP} message from a byte array
-     *
-     * @param buffer
-     *            the byte array
-     * @param bufferLength
-     *            the length of the byte array
-     */
-    public MQTTPubcomp(byte[] buffer, int bufferLength) {
+  /**
+   * Construct a {@link #PUBCOMP} message from a byte array
+   *
+   * @param buffer
+   *            The byte array
+   * @param bufferLength
+   *            The length of the byte array
+   */
+  public MQTTPubcomp(byte[] buffer, int bufferLength) {
 
-        // setBuffer(bufferIn, bufferLength);
+    // setBuffer(bufferIn, bufferLength);
 
-        int i = 0;
-        // Type (just for clarity sake we'll set it...)
-        this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
+    int i = 0;
+    // Type (just for clarity sake we'll set it...)
+    this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
 
-        // Remaining length
-        int multiplier = 1;
-        int len = 0;
-        byte digit = 0;
-        do {
-            digit = buffer[i++];
-            len += (digit & 127) * multiplier;
-            multiplier *= 128;
-        } while ((digit & 128) != 0);
-        this.setRemainingLength(len);
+    // Remaining length
+    int multiplier = 1;
+    int len = 0;
+    byte digit = 0;
+    do {
+      digit = buffer[i++];
+      len += (digit & 127) * multiplier;
+      multiplier *= 128;
+    } while ((digit & 128) != 0);
+    this.setRemainingLength(len);
 
-        // No flags for PUBBCOMP
+    // No flags for PUBBCOMP
 
-        // Get variable header (always length 2 in PUBACK)
-        variableHeader = new byte[2];
-        System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
+    // Get variable header (always length 2 in PUBACK)
+    variableHeader = new byte[2];
+    System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
 
-        // Get payload
-        payload = new byte[remainingLength - variableHeader.length];
-        if (payload.length > 0)
-            System.arraycopy(buffer, i + variableHeader.length, payload, 0,
-                    remainingLength - variableHeader.length);
+    // Get payload
+    payload = new byte[remainingLength - variableHeader.length];
+    if (payload.length > 0)
+      System.arraycopy(buffer, i + variableHeader.length, payload, 0, remainingLength - variableHeader.length);
 
-        // Get package identifier
-        packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF)
-                | (variableHeader[variableHeader.length - 1] & 0xFF);
-    }
+    // Get package identifier
+    packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF)
+        | (variableHeader[variableHeader.length - 1] & 0xFF);
+  }
 
-    @Override
-    protected byte[] generateFixedHeader() throws MQTTException, IOException {
-        // FIXED HEADER
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+  @Override
+  protected byte[] generateFixedHeader() throws MQTTException, IOException {
+    // FIXED HEADER
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        // Type and PUBACK flags, reserved bits MUST be [0,0,0,0]
-        byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2)
-                | (0x00 << 1) | (0x00) << 0);
-        out.write(fixed);
+    // Type and PUBACK flags, reserved bits MUST be [0,0,0,0]
+    byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2) | (0x00 << 1) | (0x00) << 0);
+    out.write(fixed);
 
-        // Flags (none for PUBACK)
+    // Flags (none for PUBACK)
 
-        // Remaining length
-        int length = getVariableHeader().length + getPayload().length;
-        this.setRemainingLength(length);
-        do {
-            byte digit = (byte) (length % 128);
-            length /= 128;
-            if (length > 0)
-                digit = (byte) (digit | 0x80);
-            out.write(digit);
-        } while (length > 0);
+    // Remaining length
+    int length = getVariableHeader().length + getPayload().length;
+    this.setRemainingLength(length);
+    do {
+      byte digit = (byte) (length % 128);
+      length /= 128;
+      if (length > 0)
+        digit = (byte) (digit | 0x80);
+      out.write(digit);
+    } while (length > 0);
 
-        return out.toByteArray();
-    }
+    return out.toByteArray();
+  }
 
-    @Override
-    protected byte[] generateVariableHeader() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+  @Override
+  protected byte[] generateVariableHeader() throws MQTTException, IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        out.write(MQTTHelper.MSB(packageIdentifier));
-        out.write(MQTTHelper.LSB(packageIdentifier));
+    out.write(MQTTHelper.MSB(packageIdentifier));
+    out.write(MQTTHelper.LSB(packageIdentifier));
 
-        return out.toByteArray();
-    }
+    return out.toByteArray();
+  }
 
-    @Override
-    protected byte[] generatePayload() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        return out.toByteArray();
-    }
+  @Override
+  protected byte[] generatePayload() throws MQTTException, IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    return out.toByteArray();
+  }
 
 }

@@ -24,178 +24,157 @@ import java.io.IOException;
 /**
  * MQTT Message super class, should never be instantiated.
  *
- * @author andreas
- *
+ * @author  Andreas Goransson
+ * @version 1.0
+ * @since   2017-05-06
  */
-public abstract class MQTTMessage implements MQTTConstants,
-        MQTTConnectionConstants, MQTTVersion {
+public abstract class MQTTMessage implements MQTTConstants, MQTTConnectionConstants, MQTTVersion {
 
-    protected byte flags;
+  protected byte flags;
 
-    protected int packageIdentifier;
+  protected int packageIdentifier;
 
-    protected byte[] fixedHeader;
-    protected byte[] variableHeader;
-    protected byte[] payload;
+  protected byte[] fixedHeader;
+  protected byte[] variableHeader;
+  protected byte[] payload;
 
-    protected byte type;
-    protected int remainingLength;
+  protected byte type;
+  protected int remainingLength;
 
-    // protected byte[] buffer;
+  protected abstract byte[] generateFixedHeader() throws MQTTException, IOException;
 
-    protected abstract byte[] generateFixedHeader() throws MQTTException,
-            IOException;
+  protected abstract byte[] generateVariableHeader() throws MQTTException, IOException;
 
-    protected abstract byte[] generateVariableHeader() throws MQTTException,
-            IOException;
+  protected abstract byte[] generatePayload() throws MQTTException, IOException;
 
-    protected abstract byte[] generatePayload() throws MQTTException,
-            IOException;
+  /**
+   * @return The packageIdentifier
+   */
+  public int getPackageIdentifier() {
+    return packageIdentifier;
+  }
 
-    /**
-     * @return the packageIdentifier
-     */
-    public int getPackageIdentifier() {
-        return packageIdentifier;
-    }
+  /**
+   * @param packageIdentifier
+   *            The packageIdentifier to set
+   */
+  public void setPackageIdentifier(int packageIdentifier) {
+    this.packageIdentifier = packageIdentifier;
+  }
 
-    /**
-     * @param packageIdentifier
-     *            the packageIdentifier to set
-     */
-    public void setPackageIdentifier(int packageIdentifier) {
-        this.packageIdentifier = packageIdentifier;
-    }
+  /**
+   * @return The fixedHeader
+   */
+  public byte[] getFixedHeader() {
+    return fixedHeader;
+  }
 
-    /**
-     * @return the fixedHeader
-     */
-    public byte[] getFixedHeader() {
-        return fixedHeader;
-    }
+  /**
+   * @param fixedHeader
+   *            The fixedHeader to set
+   */
+  public void setFixedHeader(byte[] fixedHeader) {
+    this.fixedHeader = fixedHeader;
+  }
 
-    /**
-     * @param fixedHeader
-     *            the fixedHeader to set
-     */
-    public void setFixedHeader(byte[] fixedHeader) {
-        this.fixedHeader = fixedHeader;
-    }
+  /**
+   * @return The variableHeader
+   */
+  public byte[] getVariableHeader() {
+    return variableHeader;
+  }
 
-    /**
-     * @return the variableHeader
-     */
-    public byte[] getVariableHeader() {
-        return variableHeader;
-    }
+  /**
+   * @param variableHeader
+   *            The variableHeader to set
+   */
+  public void setVariableHeader(byte[] variableHeader) {
+    this.variableHeader = variableHeader;
+  }
 
-    /**
-     * @param variableHeader
-     *            the variableHeader to set
-     */
-    public void setVariableHeader(byte[] variableHeader) {
-        this.variableHeader = variableHeader;
-    }
+  /**
+   * @return The payload
+   */
+  public byte[] getPayload() {
+    return payload;
+  }
 
-    /**
-     * @return the payload
-     */
-    public byte[] getPayload() {
-        return payload;
-    }
+  /**
+   * @param payload
+   *            The payload to set
+   */
+  public void setPayload(byte[] payload) {
+    this.payload = payload;
+  }
 
-    /**
-     * @param payload
-     *            the payload to set
-     */
-    public void setPayload(byte[] payload) {
-        this.payload = payload;
-    }
+  /**
+   * @return The type
+   */
+  public byte getType() {
+    return type;
+  }
 
-    /**
-     * @return the type
-     */
-    public byte getType() {
-        return type;
-    }
+  /**
+   * @param type
+   *            The type to set
+   */
+  public void setType(byte type) {
+    this.type = type;
+  }
 
-    /**
-     * @param type
-     *            the type to set
-     */
-    public void setType(byte type) {
-        this.type = type;
-    }
+  /**
+   * @return The remainingLength
+   */
+  public int getRemainingLength() {
+    return remainingLength;
+  }
 
-    /**
-     * @return the remainingLength
-     */
-    public int getRemainingLength() {
-        return remainingLength;
-    }
+  /**
+   * @param remainingLength
+   *            The remainingLength to set
+   */
+  public void setRemainingLength(int remainingLength) {
+    this.remainingLength = remainingLength;
+  }
 
-    /**
-     * @param remainingLength
-     *            the remainingLength to set
-     */
-    public void setRemainingLength(int remainingLength) {
-        this.remainingLength = remainingLength;
-    }
+  protected byte[] getProtocol() throws IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    // /**
-    // * @return the buffer
-    // */
-    // public byte[] getBuffer() {
-    // return buffer;
-    // }
-    //
-    // /**
-    // * @param buffer the buffer to set
-    // * @param bufferLength
-    // */
-    // public void setBuffer(byte[] buffer, int bufferLength) {
-    // this.buffer = new byte[bufferLength];
-    // System.arraycopy(buffer, 0, this.buffer, 0, bufferLength);
-    // }
+    // Protocol Name (Used by all messages)
+    out.write((NAME_311.getBytes("UTF-8").length >> 8) & 0xFF); // MSB
+    out.write(NAME_311.getBytes("UTF-8").length & 0xFF); // LSB
+    out.write(NAME_311.getBytes("UTF-8"));
 
-    protected byte[] getProtocol() throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    // Protocol Level (Used by all messages)
+    out.write((byte) VERSION_311);
 
-        // Protocol Name (Used by all messages)
-        out.write((NAME_311.getBytes("UTF-8").length >> 8) & 0xFF); // MSB
-        out.write(NAME_311.getBytes("UTF-8").length & 0xFF); // LSB
-        out.write(NAME_311.getBytes("UTF-8"));
+    return out.toByteArray();
+  }
 
-        // Protocol Level (Used by all messages)
-        out.write((byte) VERSION_311);
+  public byte[] get() throws IOException, MQTTException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        return out.toByteArray();
-    }
+    this.payload = generatePayload();
+    this.variableHeader = generateVariableHeader();
+    this.fixedHeader = generateFixedHeader();
 
-    public byte[] get() throws IOException, MQTTException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    out.write(fixedHeader);
+    out.write(variableHeader);
+    out.write(payload);
 
-        this.payload = generatePayload();
-        this.variableHeader = generateVariableHeader();
-        this.fixedHeader = generateFixedHeader();
+    return out.toByteArray();
+  }
 
-        out.write(fixedHeader);
-        out.write(variableHeader);
-        out.write(payload);
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
 
-        return out.toByteArray();
-    }
+    sb.append("MQTT Package ").append("\n");
+    sb.append("  type: " + MQTTHelper.decodePackageName(this.getType())).append("\n");
+    sb.append("  remaining length: " + this.getRemainingLength()).append("\n");
+    sb.append("  package identifier: " + this.getPackageIdentifier());
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
+    return sb.toString();
+  }
 
-        sb.append("MQTT Package ").append("\n");
-        sb.append("  type: " + MQTTHelper.decodePackageName(this.getType())).append("\n");
-        sb.append("  remaining length: " + this.getRemainingLength()).append(
-                "\n");
-        sb.append("  package identifier: " + this.getPackageIdentifier());
-
-        return sb.toString();
-    }
 }

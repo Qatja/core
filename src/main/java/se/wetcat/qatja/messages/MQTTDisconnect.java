@@ -22,54 +22,56 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * MQTT {@link #DISCONNECT} message
+ * The {@link #DISCONNECT} Packet is the final Control Packet sent from the 
+ * Client to the Server. It indicates that the Client is disconnecting cleanly.
  *
- * @author andreas
- *
+ * @author  Andreas Goransson
+ * @version 1.0
+ * @since   2017-05-06
  */
 public class MQTTDisconnect extends MQTTMessage {
 
-    /**
-     * Construct a {@link #DISCONNECT} message
-     */
-    public MQTTDisconnect() {
-        this.setType(DISCONNECT);
-    }
+  /**
+   * Construct a {@link #DISCONNECT} message
+   */
+  public MQTTDisconnect() {
+    this.setType(DISCONNECT);
+  }
 
-    @Override
-    protected byte[] generateFixedHeader() throws MQTTException, IOException {
-        // FIXED HEADER
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+  @Override
+  protected byte[] generateFixedHeader() throws MQTTException, IOException {
+    // FIXED HEADER
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        // Type
-        out.write((byte) (type << 4));
+    // Type
+    out.write((byte) (type << 4));
 
-        // Flags (none for PING)
+    // Flags (none for PING)
 
-        // Remaining length
-        int length = variableHeader.length + payload.length;
-        this.setRemainingLength(length);
-        do {
-            byte digit = (byte) (length % 128);
-            length /= 128;
-            if (length > 0)
-                digit = (byte) (digit | 0x80);
-            out.write(digit);
-        } while (length > 0);
+    // Remaining length
+    int length = variableHeader.length + payload.length;
+    this.setRemainingLength(length);
+    do {
+      byte digit = (byte) (length % 128);
+      length /= 128;
+      if (length > 0)
+        digit = (byte) (digit | 0x80);
+      out.write(digit);
+    } while (length > 0);
 
-        return out.toByteArray();
-    }
+    return out.toByteArray();
+  }
 
-    @Override
-    protected byte[] generateVariableHeader() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        return out.toByteArray();
-    }
+  @Override
+  protected byte[] generateVariableHeader() throws MQTTException, IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    return out.toByteArray();
+  }
 
-    @Override
-    protected byte[] generatePayload() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        return out.toByteArray();
-    }
+  @Override
+  protected byte[] generatePayload() throws MQTTException, IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    return out.toByteArray();
+  }
 
 }

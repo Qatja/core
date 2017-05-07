@@ -23,90 +23,89 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * UNSUBSCRIBE
+ * An {@link #UNSUBSCRIBE} Packet is sent by the Client to the Server, to
+ * unsubscribe from topics.
  *
- * @author andreas
- *
+ * @author  Andreas Goransson
+ * @version 1.0
+ * @since   2017-05-07
  */
 public class MQTTUnsubscribe extends MQTTMessage {
 
-    private String[] topicFilters;
+  private String[] topicFilters;
 
-    /**
-     * Construct a {@link #UNSUBSCRIBE} message
-     *
-     * @param topicFilters
-     *            list of topic filters to unsubscribe to
-     */
-    public MQTTUnsubscribe(String[] topicFilters) {
-        this.setType(UNSUBSCRIBE);
-        this.topicFilters = topicFilters;
+  /**
+   * Construct a {@link #UNSUBSCRIBE} message
+   *
+   * @param topicFilters
+   *            Topic filters to unsubscribe to
+   */
+  public MQTTUnsubscribe(String... topicFilters) {
+    this.setType(UNSUBSCRIBE);
+    this.topicFilters = topicFilters;
 
-        setPackageIdentifier(MQTTHelper.getNewPackageIdentifier());
+    setPackageIdentifier(MQTTHelper.getNewPackageIdentifier());
+  }
+
+  @Override
+  protected byte[] generateFixedHeader() throws MQTTException, IOException {
+    // FIXED HEADER
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    // Type and reserved bits, MUST be [0 0 1 0]
+    byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2) | (0x01 << 1) | (0x00 << 0));
+    out.write(fixed);
+
+    // Flags (none for UNSUBSCRIBE)
+
+    // Remaining length
+    int length = getVariableHeader().length + getPayload().length;
+    this.setRemainingLength(length);
+    do {
+      byte digit = (byte) (length % 128);
+      length /= 128;
+      if (length > 0)
+        digit = (byte) (digit | 0x80);
+      out.write(digit);
+    } while (length > 0);
+
+    return out.toByteArray();
+  }
+
+  @Override
+  protected byte[] generateVariableHeader() throws MQTTException, IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    out.write(MQTTHelper.MSB(getPackageIdentifier()));
+    out.write(MQTTHelper.LSB(getPackageIdentifier()));
+
+    return out.toByteArray();
+  }
+
+  @Override
+  protected byte[] generatePayload() throws MQTTException, IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    if (topicFilters.length <= 0)
+      throw new MQTTException("The SUBSCRIBE message must contain at least one topic filter");
+
+    for (int i = 0; i < topicFilters.length; i++) {
+      if (MQTTHelper.isUTF8(topicFilters[i].getBytes("UTF-8")))
+        throw new MQTTException("Invalid topic filter encoding: " + topicFilters[i]);
+
+      out.write(MQTTHelper.MSB(topicFilters[i].length()));
+      out.write(MQTTHelper.LSB(topicFilters[i].length()));
+      out.write(topicFilters[i].getBytes());
     }
 
-    @Override
-    protected byte[] generateFixedHeader() throws MQTTException, IOException {
-        // FIXED HEADER
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+    return out.toByteArray();
+  }
 
-        // Type and reserved bits, MUST be [0 0 1 0]
-        byte fixed = (byte) ((type << 4) | (0x00 << 3) | (0x00 << 2)
-                | (0x01 << 1) | (0x00 << 0));
-        out.write(fixed);
-
-        // Flags (none for UNSUBSCRIBE)
-
-        // Remaining length
-        int length = getVariableHeader().length + getPayload().length;
-        this.setRemainingLength(length);
-        do {
-            byte digit = (byte) (length % 128);
-            length /= 128;
-            if (length > 0)
-                digit = (byte) (digit | 0x80);
-            out.write(digit);
-        } while (length > 0);
-
-        return out.toByteArray();
-    }
-
-    @Override
-    protected byte[] generateVariableHeader() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        out.write(MQTTHelper.MSB(getPackageIdentifier()));
-        out.write(MQTTHelper.LSB(getPackageIdentifier()));
-
-        return out.toByteArray();
-    }
-
-    @Override
-    protected byte[] generatePayload() throws MQTTException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        if (topicFilters.length <= 0)
-            throw new MQTTException(
-                    "The SUBSCRIBE message must contain at least one topic filter");
-
-        for (int i = 0; i < topicFilters.length; i++) {
-            if (MQTTHelper.isUTF8(topicFilters[i].getBytes("UTF-8")))
-                throw new MQTTException("Invalid topic filter encoding: "
-                        + topicFilters[i]);
-
-            out.write(MQTTHelper.MSB(topicFilters[i].length()));
-            out.write(MQTTHelper.LSB(topicFilters[i].length()));
-            out.write(topicFilters[i].getBytes());
-        }
-
-        return out.toByteArray();
-    }
-
-    /**
-     * @return the topicFilters
-     */
-    public String[] getTopicFilters() {
-        return topicFilters;
-    }
+  /**
+   * @return The topicFilters
+   */
+  public String[] getTopicFilters() {
+    return topicFilters;
+  }
 
 }
