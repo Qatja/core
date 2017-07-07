@@ -16,7 +16,7 @@ Add the following to your build.gradle file
 
 ```groovy
 dependencies {
-    compile 'se.wetcat.qatja:core:1.0.0'
+    compile 'se.wetcat.qatja:core:1.0.1'
 }
 ```
 
@@ -26,7 +26,7 @@ dependencies {
 <dependency>
   <groupId>se.wetcat.qatja</groupId>
   <artifactId>core</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <type>pom</type>
 </dependency>
 ```
