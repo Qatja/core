@@ -16,20 +16,21 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static se.wetcat.qatja.MQTTVersion.VERSION_311;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
+
 import static se.wetcat.qatja.MQTTVersion.NAME_311;
+import static se.wetcat.qatja.MQTTVersion.VERSION_311;
 
 /**
  * MQTT Message super class, should never be instantiated.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public abstract class MQTTMessage {
 
@@ -58,8 +59,7 @@ public abstract class MQTTMessage {
   }
 
   /**
-   * @param packageIdentifier
-   *            The packageIdentifier to set
+   * @param packageIdentifier The packageIdentifier to set
    */
   public void setPackageIdentifier(int packageIdentifier) {
     this.packageIdentifier = packageIdentifier;
@@ -73,8 +73,7 @@ public abstract class MQTTMessage {
   }
 
   /**
-   * @param fixedHeader
-   *            The fixedHeader to set
+   * @param fixedHeader The fixedHeader to set
    */
   public void setFixedHeader(byte[] fixedHeader) {
     this.fixedHeader = fixedHeader;
@@ -88,8 +87,7 @@ public abstract class MQTTMessage {
   }
 
   /**
-   * @param variableHeader
-   *            The variableHeader to set
+   * @param variableHeader The variableHeader to set
    */
   public void setVariableHeader(byte[] variableHeader) {
     this.variableHeader = variableHeader;
@@ -103,8 +101,7 @@ public abstract class MQTTMessage {
   }
 
   /**
-   * @param payload
-   *            The payload to set
+   * @param payload The payload to set
    */
   public void setPayload(byte[] payload) {
     this.payload = payload;
@@ -118,8 +115,7 @@ public abstract class MQTTMessage {
   }
 
   /**
-   * @param type
-   *            The type to set
+   * @param type The type to set
    */
   public void setType(byte type) {
     this.type = type;
@@ -133,8 +129,7 @@ public abstract class MQTTMessage {
   }
 
   /**
-   * @param remainingLength
-   *            The remainingLength to set
+   * @param remainingLength The remainingLength to set
    */
   public void setRemainingLength(int remainingLength) {
     this.remainingLength = remainingLength;

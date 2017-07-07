@@ -16,41 +16,40 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
+
 import static se.wetcat.qatja.MQTTConstants.AT_MOST_ONCE;
 import static se.wetcat.qatja.MQTTConstants.CONNECT;
-import static se.wetcat.qatja.MQTTConstants.MIN_LENGTH;
 import static se.wetcat.qatja.MQTTConstants.MAX_LENGTH;
+import static se.wetcat.qatja.MQTTConstants.MIN_LENGTH;
 import static se.wetcat.qatja.MQTTVersion.VERSION_311;
 
 /**
- * After a Network Connection is established by a Client to a Server, the first
- * Packet sent from the Client to the Server MUST be a {@link #CONNECT} Packet
+ * After a Network Connection is established by a Client to a Server, the first Packet sent from the
+ * Client to the Server MUST be a {@link se.wetcat.qatja.MQTTConstants#CONNECT} Packet
  * [MQTT-3.1.0-1].
+ * <p>
+ * A Client can only send the {@link se.wetcat.qatja.MQTTConstants#CONNECT} Packet once over a
+ * Network Connection. The Server MUST process a second
+ * {@link se.wetcat.qatja.MQTTConstants#CONNECT} Packet sent from a Client as a protocol violation
+ * and disconnect the Client [MQTT-3.1.0-2].  See section 4.8 for information about handling errors.
+ * <p>
+ * The payload contains one or more encoded fields. They specify a unique Client identifier for the
+ * Client, a Will topic, Will Message, User Name and Password. All but the Client identifier are
+ * optional and their presence is determined based on flags in the variable header.
  *
- * A Client can only send the {@link #CONNECT} Packet once over a Network
- * Connection. The Server MUST process a second {@link #CONNECT} Packet sent
- * from a Client as a protocol violation and disconnect the Client
- * [MQTT-3.1.0-2].  See section 4.8 for information about handling errors.
- *
- * The payload contains one or more encoded fields. They specify a unique Client
- * identifier for the Client, a Will topic, Will Message, User Name and
- * Password. All but the Client identifier are optional and their presence is
- * determined based on flags in the variable header.
- *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTConnect extends MQTTMessage {
 
   /**
-   * The identifier for the client, MUST be present in all {@link #CONNECT}
+   * The identifier for the client, MUST be present in all {@link se.wetcat.qatja.MQTTConstants#CONNECT}
    * messages
    */
   private String clientIdentifier;
@@ -75,79 +74,89 @@ public class MQTTConnect extends MQTTMessage {
   private boolean cleanSession;
   private int keepAlive;
 
+  public static MQTTConnect newInstance() {
+    return new MQTTConnect();
+  }
+
+  public static MQTTConnect newInstance(String clientIdentifier) {
+    return new MQTTConnect();
+  }
+
+  public static MQTTConnect newInstance(String clientIdentifier, String username, String password) {
+    return new MQTTConnect(clientIdentifier, username, password);
+  }
+
+  public static MQTTConnect newInstance(String clientIdentifier, String username, String password,
+                                        boolean cleanSession) {
+    return new MQTTConnect(clientIdentifier, username, password, cleanSession);
+  }
+
+  public static MQTTConnect newInstance(String clientIdentifier, String username, String password,
+                                        boolean willRetain, byte willQoS, String willTopic,
+                                        String willMessage, boolean cleanSession, int keepAlive) {
+    return new MQTTConnect(clientIdentifier, username, password, willRetain, willQoS, willTopic, willMessage, cleanSession, keepAlive);
+  }
+
+  public static MQTTConnect fromButton(byte[] buffer) {
+    return new MQTTConnect(buffer);
+  }
+
   /**
    * Default MQTTConnect constructor. All flags set to default values, and no
    * client identifier set (cleanSession set to true). Keep alive set to 10
    * seconds.
    */
-  public MQTTConnect() {
+  private MQTTConnect() {
     this("");
   }
 
   /**
    * Create a new MQTT Connect message
-   * 
-   * @param clientIdentifier
-   *            The client identifier
+   *
+   * @param clientIdentifier The client identifier
    */
-  public MQTTConnect(String clientIdentifier) {
+  private MQTTConnect(String clientIdentifier) {
     this(clientIdentifier, null, null);
   }
 
   /**
    * Create a new MQTT Connect message
-   * 
-   * @param clientIdentifier
-   *            The client identifier
-   * @param username
-   *            The client username
-   * @param password
-   *            The client password
+   *
+   * @param clientIdentifier The client identifier
+   * @param username         The client username
+   * @param password         The client password
    */
-  public MQTTConnect(String clientIdentifier, String username, String password) {
+  private MQTTConnect(String clientIdentifier, String username, String password) {
     this(clientIdentifier, username, password, false);
   }
 
   /**
    * Create a new MQTT Connect message
-   * 
-   * @param clientIdentifier
-   *            The client identifier
-   * @param username
-   *            The client username
-   * @param password
-   *            The client password
-   * @param cleanSession
-   *            Connect with clear session state
+   *
+   * @param clientIdentifier The client identifier
+   * @param username         The client username
+   * @param password         The client password
+   * @param cleanSession     Connect with clear session state
    */
-  public MQTTConnect(String clientIdentifier, String username, String password, boolean cleanSession) {
+  private MQTTConnect(String clientIdentifier, String username, String password, boolean cleanSession) {
     this(clientIdentifier, username, password, false, AT_MOST_ONCE, null, null, cleanSession, 10);
   }
 
   /**
    * Create a new MQTT Connect message
-   * 
-   * @param clientIdentifier
-   *            The client identifier
-   * @param username
-   *            The client username
-   * @param password
-   *            The client password
-   * @param willRetain
-   *            Set last will and testament
-   * @param willQoS
-   *            Last will QoS
-   * @param willTopic
-   *            Last will topic
-   * @param willMessage
-   *            Last will message
-   * @param cleanSession
-   *            Connect with clean session state
-   * @param keepAlive
-   *            Time interval in seconds
+   *
+   * @param clientIdentifier The client identifier
+   * @param username         The client username
+   * @param password         The client password
+   * @param willRetain       Set last will and testament
+   * @param willQoS          Last will QoS
+   * @param willTopic        Last will topic
+   * @param willMessage      Last will message
+   * @param cleanSession     Connect with clean session state
+   * @param keepAlive        Time interval in seconds
    */
-  public MQTTConnect(String clientIdentifier, String username, String password, boolean willRetain, byte willQoS,
-      String willTopic, String willMessage, boolean cleanSession, int keepAlive) {
+  private MQTTConnect(String clientIdentifier, String username, String password, boolean willRetain, byte willQoS,
+                      String willTopic, String willMessage, boolean cleanSession, int keepAlive) {
     this.type = CONNECT;
 
     this.clientIdentifier = clientIdentifier;
@@ -167,10 +176,9 @@ public class MQTTConnect extends MQTTMessage {
   /**
    * Create MQTT Connect message from a byte[].
    *
-   * @param buffer
-   *            Buffer from which to create message
+   * @param buffer Buffer from which to create message
    */
-  public MQTTConnect(byte[] buffer) {
+  private MQTTConnect(byte[] buffer) {
     int i = 0;
     // Type (just for clarity sake we'll set it...)
     this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
@@ -206,15 +214,11 @@ public class MQTTConnect extends MQTTMessage {
 
   /**
    * Set last will and testament
-   *  
-   * @param willTopic
-   *            Set the last will topic
-   * @param willMessage
-   *            Set last will message
-   * @param willRetain
-   *            Set last will retain flag
-   * @param willQoS
-   *            Set last will QoS
+   *
+   * @param willTopic   Set the last will topic
+   * @param willMessage Set last will message
+   * @param willRetain  Set last will retain flag
+   * @param willQoS     Set last will QoS
    */
   public void setWill(String willTopic, String willMessage, boolean willRetain, byte willQoS) {
     this.willFlag = true;
@@ -369,8 +373,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param clientIdentifier
-   *            The clientIdentifier to set
+   * @param clientIdentifier The clientIdentifier to set
    */
   public void setClientIdentifier(String clientIdentifier) {
     this.clientIdentifier = clientIdentifier;
@@ -384,8 +387,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param protocolVersion
-   *            The protocolVersion to set
+   * @param protocolVersion The protocolVersion to set
    */
   public void setProtocolVersion(byte protocolVersion) {
     this.protocolVersion = protocolVersion;
@@ -399,8 +401,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param protocolName
-   *            The protocolName to set
+   * @param protocolName The protocolName to set
    */
   public void setProtocolName(String protocolName) {
     this.protocolName = protocolName;
@@ -414,8 +415,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param willRetain
-   *            The willRetain to set
+   * @param willRetain The willRetain to set
    */
   public void setWillRetain(boolean willRetain) {
     this.willRetain = willRetain;
@@ -429,8 +429,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param willFlag
-   *            The willFlag to set
+   * @param willFlag The willFlag to set
    */
   public void setWillFlag(boolean willFlag) {
     this.willFlag = willFlag;
@@ -444,8 +443,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param willTopic
-   *            The willTopic to set
+   * @param willTopic The willTopic to set
    */
   public void setWillTopic(String willTopic) {
     this.willTopic = willTopic;
@@ -459,8 +457,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param willMessage
-   *            The willMessage to set
+   * @param willMessage The willMessage to set
    */
   public void setWillMessage(String willMessage) {
     this.willMessage = willMessage;
@@ -474,8 +471,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param willQoS
-   *            The willQoS to set
+   * @param willQoS The willQoS to set
    */
   public void setWillQoS(byte willQoS) {
     this.willQoS = willQoS;
@@ -489,8 +485,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param username
-   *            The username to set
+   * @param username The username to set
    */
   public void setUsername(String username) {
     this.username = username;
@@ -504,8 +499,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param password
-   *            The password to set
+   * @param password The password to set
    */
   public void setPassword(String password) {
     this.password = password;
@@ -519,8 +513,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param cleanSession
-   *            The cleanSession to set
+   * @param cleanSession The cleanSession to set
    */
   public void setCleanSession(boolean cleanSession) {
     this.cleanSession = cleanSession;
@@ -534,8 +527,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   /**
-   * @param keepAlive
-   *            The keepAlive to set
+   * @param keepAlive The keepAlive to set
    */
   public void setKeepAlive(int keepAlive) {
     this.keepAlive = keepAlive;

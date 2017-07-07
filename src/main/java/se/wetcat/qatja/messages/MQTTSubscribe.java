@@ -16,46 +16,48 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
 
 import static se.wetcat.qatja.MQTTConstants.SUBSCRIBE;
 
 /**
- * The {@link #SUBSCRIBE} Packet is sent from the Client to the Server to create
- * one or more Subscriptions. Each Subscription registers a Client’s interest in
- * one or more Topics. The Server sends {@link #PUBLISH} Packets to the Client
- * in order to forward Application Messages that were published to Topics that
- * match these Subscriptions. The {@link #SUBSCRIBE} Packet also specifies (for
- * each Subscription) the maximum QoS with which the Server can send Application
- * Messages to the Client.
+ * The {@link se.wetcat.qatja.MQTTConstants#SUBSCRIBE} Packet is sent from the Client to the Server
+ * to create one or more Subscriptions. Each Subscription registers a Client’s interest in one or
+ * more Topics. The Server sends {@link se.wetcat.qatja.MQTTConstants#PUBLISH} Packets to the Client
+ * in order to forward Application Messages that were published to Topics that match these
+ * Subscriptions. The {@link se.wetcat.qatja.MQTTConstants#SUBSCRIBE} Packet also specifies (for
+ * each Subscription) the maximum QoS with which the Server can send Application Messages to the
+ * Client.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-07
+ * @since 2017-05-07
  */
 public class MQTTSubscribe extends MQTTMessage {
 
   private String[] topicFilters;
   private byte[] QoSs;
 
+  public static MQTTSubscribe newInstance(String[] topicFilters, byte[] QoSs, int identifier) {
+    return new MQTTSubscribe(topicFilters, QoSs, identifier);
+  }
+
   /**
-   * Construct a {@link #SUBSCRIBE} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#SUBSCRIBE} message
    *
-   * @param topicFilters
-   *            The topics to subscribe to
-   * @param QoSs
-   *            The QoS for each topic
+   * @param topicFilters The topics to subscribe to
+   * @param QoSs         The QoS for each topic
    */
-  public MQTTSubscribe(String[] topicFilters, byte[] QoSs) {
+  private MQTTSubscribe(String[] topicFilters, byte[] QoSs, int identifier) {
     this.setType(SUBSCRIBE);
     this.topicFilters = topicFilters;
     this.QoSs = QoSs;
 
-    setPackageIdentifier(MQTTHelper.getNewPackageIdentifier());
+    setPackageIdentifier(identifier);
   }
 
   @Override

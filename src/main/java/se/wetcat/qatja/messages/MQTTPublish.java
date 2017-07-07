@@ -16,24 +16,24 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static se.wetcat.qatja.MQTTConstants.AT_MOST_ONCE;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
+
 import static se.wetcat.qatja.MQTTConstants.AT_LEAST_ONCE;
+import static se.wetcat.qatja.MQTTConstants.AT_MOST_ONCE;
 import static se.wetcat.qatja.MQTTConstants.EXACTLY_ONCE;
 import static se.wetcat.qatja.MQTTConstants.PUBLISH;
 
 /**
- * A {@link #PUBLISH} Control Packet is sent from a Client to a Server or from
- * Server to a Client to transport an Application Message.
+ * A {@link se.wetcat.qatja.MQTTConstants#PUBLISH} Control Packet is sent from a Client to a Server
+ * or from Server to a Client to transport an Application Message.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTPublish extends MQTTMessage {
 
@@ -43,29 +43,36 @@ public class MQTTPublish extends MQTTMessage {
 
   private String topicName;
 
-  /**
-   * Construct a {@link #PUBLISH} message
-   *
-   * @param topic
-   *            The topic to publish to
-   * @param payload
-   *            The message payload
-   */
-  public MQTTPublish(String topic, byte[] payload) {
-    this(topic, payload, AT_MOST_ONCE);
+  public static MQTTPublish fromBuffer(byte[] buffer) {
+    return new MQTTPublish(buffer);
+  }
+
+  public static MQTTPublish newInstance(String topic, byte[] payload, int identifier) {
+    return new MQTTPublish(topic, payload, identifier);
+  }
+
+  public static MQTTPublish newInstance(String topic, byte[] payload, byte QoS, int identifier) {
+    return new MQTTPublish(topic, payload, QoS, identifier);
   }
 
   /**
-   * Construct a {@link #PUBLISH} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBLISH} message
    *
-   * @param topic
-   *            the topic to publish to
-   * @param payload
-   *            the message payload
-   * @param QoS
-   *            the quality of service for message
+   * @param topic   The topic to publish to
+   * @param payload The message payload
    */
-  public MQTTPublish(String topic, byte[] payload, byte QoS) {
+  private MQTTPublish(String topic, byte[] payload, int identifier) {
+    this(topic, payload, AT_MOST_ONCE, identifier);
+  }
+
+  /**
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBLISH} message
+   *
+   * @param topic   the topic to publish to
+   * @param payload the message payload
+   * @param QoS     the quality of service for message
+   */
+  private MQTTPublish(String topic, byte[] payload, byte QoS, int identifier) {
     this.type = PUBLISH;
 
     this.topicName = topic;
@@ -73,21 +80,17 @@ public class MQTTPublish extends MQTTMessage {
 
     this.QoS = QoS;
 
-    if (this.QoS > AT_MOST_ONCE)
-      // Get a new package identifier
-      packageIdentifier = MQTTHelper.getNewPackageIdentifier();
+    if (this.QoS > AT_MOST_ONCE) {
+      setPackageIdentifier(identifier);
+    }
   }
 
   /**
-   * Construct a {@link #PUBLISH} message from a buffer
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBLISH} message from a buffer
    *
-   * @param buffer
-   *            The buffer
-   * @param bufferLength
-   *            The buffer length
+   * @param buffer The buffer
    */
-  public MQTTPublish(byte[] buffer, int bufferLength) {
-
+  private MQTTPublish(byte[] buffer) {
     int i = 0;
 
     // Type (just for clarity sake we'll set it...)
@@ -112,15 +115,16 @@ public class MQTTPublish extends MQTTMessage {
     // Get variable header (topic length + 2[topic len] + 2[pkg id])
 
     switch (getQoS()) {
-    case AT_MOST_ONCE:
-      // No packageIdentifier
-      variableHeader = new byte[len + 2];
-      break;
-    case AT_LEAST_ONCE:
-    case EXACTLY_ONCE:
-      // 2 byte packageIdentifier
-      variableHeader = new byte[len + 2 + 2];
-      break;
+      case AT_MOST_ONCE:
+        // No packageIdentifier
+        variableHeader = new byte[len + 2];
+        break;
+
+      case AT_LEAST_ONCE:
+      case EXACTLY_ONCE:
+        // 2 byte packageIdentifier
+        variableHeader = new byte[len + 2 + 2];
+        break;
     }
 
     System.arraycopy(buffer, i, variableHeader, 0, variableHeader.length);
@@ -133,14 +137,15 @@ public class MQTTPublish extends MQTTMessage {
     payload = new byte[remainingLength - variableHeader.length];
 
     switch (getQoS()) {
-    case AT_MOST_ONCE:
-      // No packageIdentifier
-      break;
-    case AT_LEAST_ONCE:
-    case EXACTLY_ONCE:
-      // 2 byte packageIdentifier
-      packageIdentifier = (variableHeader[variableHeader.length - 1]) | (variableHeader[variableHeader.length - 2]);
-      break;
+      case AT_MOST_ONCE:
+        // No packageIdentifier
+        break;
+
+      case AT_LEAST_ONCE:
+      case EXACTLY_ONCE:
+        // 2 byte packageIdentifier
+        packageIdentifier = (variableHeader[variableHeader.length - 1]) | (variableHeader[variableHeader.length - 2]);
+        break;
     }
 
     System.arraycopy(buffer, i, payload, 0, payload.length);

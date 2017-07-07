@@ -16,36 +16,44 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
 
 import static se.wetcat.qatja.MQTTConstants.PUBREL;
 
 /**
- * A {@link #PUBREL} Packet is the response to a {@link #PUBREC} Packet. It is
- * the third packet of the {@link #EXACTLY_ONCE} protocol exchange.
+ * A {@link se.wetcat.qatja.MQTTConstants#PUBREL} Packet is the response to a
+ * {@link se.wetcat.qatja.MQTTConstants#PUBREC} Packet. It is the third packet of the
+ * {@link se.wetcat.qatja.MQTTConstants#EXACTLY_ONCE} protocol exchange.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-07
+ * @since 2017-05-07
  */
 public class MQTTPubrel extends MQTTMessage {
 
+  public static MQTTPubrel newInstance(int packageIdentifier) {
+    return new MQTTPubrel(packageIdentifier);
+  }
+
+  public static MQTTPubrel fromBuffer(byte[] buffer) {
+    return new MQTTPubrel(buffer);
+  }
+
   /**
-   * Construct a {@link #PUBREL} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBREL} message
    *
-   * @param packageIdentifier
-   *            The package identifier
+   * @param packageIdentifier The package identifier
    */
-  public MQTTPubrel(int packageIdentifier) {
+  private MQTTPubrel(int packageIdentifier) {
     setType(PUBREL);
     setPackageIdentifier(packageIdentifier);
   }
 
-  public MQTTPubrel(byte[] buffer) {
+  private MQTTPubrel(byte[] buffer) {
 
     int i = 0;
 

@@ -16,27 +16,31 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import se.wetcat.qatja.MQTTException;
 
 import static se.wetcat.qatja.MQTTConstants.DISCONNECT;
 
 /**
- * The {@link #DISCONNECT} Packet is the final Control Packet sent from the 
- * Client to the Server. It indicates that the Client is disconnecting cleanly.
+ * The {@link se.wetcat.qatja.MQTTConstants#DISCONNECT} Packet is the final Control Packet sent from
+ * the Client to the Server. It indicates that the Client is disconnecting cleanly.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTDisconnect extends MQTTMessage {
 
+  public static MQTTDisconnect newInstance() {
+    return new MQTTDisconnect();
+  }
+
   /**
-   * Construct a {@link #DISCONNECT} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#DISCONNECT} message
    */
-  public MQTTDisconnect() {
+  private MQTTDisconnect() {
     this.setType(DISCONNECT);
   }
 
