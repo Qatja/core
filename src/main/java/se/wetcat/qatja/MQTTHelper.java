@@ -124,7 +124,7 @@ public class MQTTHelper {
   /**
    * Decode message type
    *
-   * @param buffer
+   * @param buffer The message buffer to decode
    * @return The message type
    */
   public static byte decodeType(byte[] buffer) {
