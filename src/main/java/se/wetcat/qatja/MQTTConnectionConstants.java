@@ -73,8 +73,8 @@ public class MQTTConnectionConstants {
   /**
    * Helper to resolve a connection state name.
    *
-   * @param state
-   * @return
+   * @param state The connection state to translate
+   * @return The connection state name
    */
   public static String resolveStateName(int state) {
     switch (state) {
