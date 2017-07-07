@@ -16,35 +16,43 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-import se.wetcat.qatja.MQTTConstants;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import se.wetcat.qatja.MQTTConstants;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
+
 /**
- * The {@link #PUBCOMP} Packet is the response to a {@link #PUBREL} Packet. It
- * is the fourth and final packet of the {@link #EXACTLY_ONCE} protocol exchange
+ * The {@link se.wetcat.qatja.MQTTConstants#PUBCOMP} Packet is the response to a
+ * {@link se.wetcat.qatja.MQTTConstants#PUBREL} Packet. It is the fourth and final packet of the
+ * {@link se.wetcat.qatja.MQTTConstants#EXACTLY_ONCE} protocol exchange
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTPubcomp extends MQTTMessage {
 
-  public MQTTPubcomp(int packageIdentifier) {
+  public static MQTTPubcomp newInstance(int packageIdentifier) {
+    return new MQTTPubcomp(packageIdentifier);
+  }
+
+  public static MQTTPubcomp fromBuffer(byte[] buffer) {
+    return new MQTTPubcomp(buffer);
+  }
+
+  private MQTTPubcomp(int packageIdentifier) {
     setType(MQTTConstants.PUBCOMP);
     setPackageIdentifier(packageIdentifier);
   }
 
   /**
-   * Construct a {@link #PUBCOMP} message from a byte array
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBCOMP} message from a byte array
    *
-   * @param buffer
-   *            The byte array
+   * @param buffer The byte array
    */
-  public MQTTPubcomp(byte[] buffer) {
+  private MQTTPubcomp(byte[] buffer) {
 
     // setBuffer(bufferIn, bufferLength);
 
@@ -75,8 +83,7 @@ public class MQTTPubcomp extends MQTTMessage {
       System.arraycopy(buffer, i + variableHeader.length, payload, 0, remainingLength - variableHeader.length);
 
     // Get package identifier
-    packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF)
-        | (variableHeader[variableHeader.length - 1] & 0xFF);
+    packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF) | (variableHeader[variableHeader.length - 1] & 0xFF);
   }
 
   @Override

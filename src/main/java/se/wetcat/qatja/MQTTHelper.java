@@ -43,7 +43,7 @@ import static se.wetcat.qatja.MQTTConstants.DISCONNECT;
  */
 public class MQTTHelper {
 
-  private static int lastPackageIdentifier = 1;
+//  private static int lastPackageIdentifier = 1;
 
   private static final String UTF8 = "UTF-8";
 
@@ -69,9 +69,9 @@ public class MQTTHelper {
     return /*topic.contains("/") ||*/ topic.contains("#") || topic.contains("+");
   }
 
-  public static int getNewPackageIdentifier() {
-    return (lastPackageIdentifier += 1);
-  }
+//  public static int getNewPackageIdentifier() {
+//    return (lastPackageIdentifier += 1);
+//  }
 
   /**
    * Return the MSB of a string length

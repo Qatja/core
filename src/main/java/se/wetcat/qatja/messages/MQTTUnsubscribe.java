@@ -16,37 +16,40 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
 
 import static se.wetcat.qatja.MQTTConstants.UNSUBSCRIBE;
 
 /**
- * An {@link #UNSUBSCRIBE} Packet is sent by the Client to the Server, to
- * unsubscribe from topics.
+ * An {@link se.wetcat.qatja.MQTTConstants#UNSUBSCRIBE} Packet is sent by the Client to the Server,
+ * to unsubscribe from topics.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-07
+ * @since 2017-05-07
  */
 public class MQTTUnsubscribe extends MQTTMessage {
 
   private String[] topicFilters;
 
+  public static MQTTUnsubscribe newInstance(int identifier, String... topicFilters) {
+    return new MQTTUnsubscribe(identifier, topicFilters);
+  }
+
   /**
-   * Construct a {@link #UNSUBSCRIBE} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#UNSUBSCRIBE} message
    *
-   * @param topicFilters
-   *            Topic filters to unsubscribe to
+   * @param topicFilters Topic filters to unsubscribe to
    */
-  public MQTTUnsubscribe(String... topicFilters) {
+  private MQTTUnsubscribe(int identifier, String... topicFilters) {
     this.setType(UNSUBSCRIBE);
     this.topicFilters = topicFilters;
 
-    setPackageIdentifier(MQTTHelper.getNewPackageIdentifier());
+    setPackageIdentifier(identifier);
   }
 
   @Override

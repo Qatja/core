@@ -16,31 +16,35 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import se.wetcat.qatja.MQTTException;
 
 import static se.wetcat.qatja.MQTTConstants.PINGREQ;
 
 /**
- * The {@link #PINGREQ}  Packet is sent from a Client to the Server. It can be
- * used to:
+ * The {@link se.wetcat.qatja.MQTTConstants#PINGREQ}  Packet is sent from a Client to the Server. It
+ * can be used to:
  * 1. Indicate to the Server that the Client is alive in the absence of any
- *    other Control Packets being sent from the Client to the Server.
+ * other Control Packets being sent from the Client to the Server.
  * 2. Request that the Server responds to confirm that it is alive.
  * 3. Exercise the network to indicate that the Network Connection is active.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTPingreq extends MQTTMessage {
 
+  public static MQTTPingreq newInstance() {
+    return new MQTTPingreq();
+  }
+
   /**
-   * Construct a {@link #PINGREQ} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PINGREQ} message
    */
-  public MQTTPingreq() {
+  private MQTTPingreq() {
     this.setType(PINGREQ);
   }
 

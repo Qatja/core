@@ -16,36 +16,44 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
 
 import static se.wetcat.qatja.MQTTConstants.PUBACK;
 
 /**
- * A {@link #PUBACK} Packet is the response to a {@link #PUBLISH} Packet with
- * QoS level {@link #AT_LEAST_ONCE}.
- * 
- * @author  Andreas Goransson
+ * A {@link se.wetcat.qatja.MQTTConstants#PUBACK} Packet is the response to a
+ * {@link se.wetcat.qatja.MQTTConstants#PUBLISH} Packet with se.wetcat.qatja.MQTTConstantsQoS level
+ * {@link se.wetcat.qatja.MQTTConstants#AT_LEAST_ONCE}.
+ *
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTPuback extends MQTTMessage {
 
-  public MQTTPuback(int packageIdentifier) {
+  public static MQTTPuback newInstance(int packageIdentifier) {
+    return new MQTTPuback(packageIdentifier);
+  }
+
+  public static MQTTPuback fromBuffer(byte[] buffer) {
+    return new MQTTPuback(buffer);
+  }
+
+  private MQTTPuback(int packageIdentifier) {
     this.setType(PUBACK);
     this.setPackageIdentifier(packageIdentifier);
   }
 
   /**
-   * Construct a {@link #PUBACK} message from a byte array
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBACK} message from a byte array
    *
-   * @param buffer
-   *            The byte array
+   * @param buffer The byte array
    */
-  public MQTTPuback(byte[] buffer) {
+  private MQTTPuback(byte[] buffer) {
 
     int i = 0;
     // Type (just for clarity sake we'll set it...)
@@ -72,8 +80,7 @@ public class MQTTPuback extends MQTTMessage {
       System.arraycopy(buffer, i + variableHeader.length, payload, 0, remainingLength - variableHeader.length);
 
     // Get package identifier
-    packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF)
-        | (variableHeader[variableHeader.length - 1] & 0xFF);
+    packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF) | (variableHeader[variableHeader.length - 1] & 0xFF);
   }
 
   @Override

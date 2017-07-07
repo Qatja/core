@@ -21,29 +21,26 @@ import java.io.IOException;
 import se.wetcat.qatja.MQTTException;
 
 /**
- * A {@link se.wetcat.qatja.MQTTConstants#SUBACK} Packet is sent by the Server to the Client to
- * confirm receipt and processing of a {@link se.wetcat.qatja.MQTTConstants#SUBSCRIBE} Packet.
- * <p>
- * A {@link se.wetcat.qatja.MQTTConstants#SUBACK} Packet contains a list of return codes, that
- * specify the maximum QoS level that was granted in each Subscription that was requested by the
- * {@link se.wetcat.qatja.MQTTConstants#SUBSCRIBE}.
+ * A {@link se.wetcat.qatja.MQTTConstants#UNSUBACK} package is the response to a
+ * {@link se.wetcat.qatja.MQTTConstants#UNSUBSCRIBE} packet
  *
- * @author Andreas Goransson
- * @version 1.0.0
- * @since 2017-05-07
+ * @author andreas
  */
-public class MQTTSuback extends MQTTMessage {
+public class MQTTUnsuback extends MQTTMessage {
 
-  public static MQTTSuback fromBuffer(byte[] buffer) {
-    return new MQTTSuback(buffer);
+  public static MQTTUnsuback fromBuffer(byte[] buffer) {
+    return new MQTTUnsuback(buffer);
   }
 
   /**
-   * Construct a {@link se.wetcat.qatja.MQTTConstants#SUBACK} message from a buffer
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#UNSUBACK} message from a buffer
    *
-   * @param buffer The buffer
+   * @param buffer the buffer
    */
-  private MQTTSuback(byte[] buffer) {
+  private MQTTUnsuback(byte[] buffer) {
+
+    // setBuffer(bufferIn, bufferLength);
+
     int i = 0;
     // Type (just for clarity sake we'll set it...)
     this.setType((byte) ((buffer[i++] >> 4) & 0x0F));
@@ -66,7 +63,8 @@ public class MQTTSuback extends MQTTMessage {
     // Get payload
     payload = new byte[remainingLength - variableHeader.length];
     if (payload.length > 0)
-      System.arraycopy(buffer, i + variableHeader.length, payload, 0, remainingLength - variableHeader.length);
+      System.arraycopy(buffer, i + variableHeader.length, payload, 0,
+          remainingLength - variableHeader.length);
 
     // Get package identifier
     packageIdentifier = (variableHeader[variableHeader.length - 2] >> 8 & 0xFF) | (variableHeader[variableHeader.length - 1] & 0xFF);
@@ -74,19 +72,19 @@ public class MQTTSuback extends MQTTMessage {
 
   @Override
   protected byte[] generateFixedHeader() throws MQTTException, IOException {
-    // Client doesn't create SUBACK
+    // Client doesn't create UNSUBACK
     return null;
   }
 
   @Override
   protected byte[] generateVariableHeader() throws MQTTException, IOException {
-    // Client doesn't create SUBACK
+    // Client doesn't create UNSUBACK
     return null;
   }
 
   @Override
   protected byte[] generatePayload() throws MQTTException, IOException {
-    // Client doesn't create SUBACK
+    // Client doesn't create UNSUBACK
     return null;
   }
 

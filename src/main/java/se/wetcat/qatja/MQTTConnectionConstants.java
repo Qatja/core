@@ -18,12 +18,12 @@ package se.wetcat.qatja;
 
 /**
  * Connection constants class.
- * 
+ * <p>
  * TODO: Consider moving this to implementation specific libs.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-07
+ * @since 2017-05-07
  */
 public class MQTTConnectionConstants {
 
@@ -69,4 +69,26 @@ public class MQTTConnectionConstants {
    */
   public static final int MQTT_RAW_READ = CONSTANTS_BASE + 11;
 
+
+  /**
+   * Helper to resolve a connection state name.
+   *
+   * @param state
+   * @return
+   */
+  public static String resolveStateName(int state) {
+    switch (state) {
+      case STATE_NONE:
+        return "STATE_NONE";
+      case STATE_CONNECTING:
+        return "STATE_CONNECTING";
+      case STATE_CONNECTED:
+        return "STATE_CONNECTED";
+      case STATE_CONNECTION_FAILED:
+        return "STATE_CONNECTION_FAILED";
+
+      default:
+        return "UNDEFINED STATE";
+    }
+  }
 }

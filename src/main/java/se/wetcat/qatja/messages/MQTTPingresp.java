@@ -16,27 +16,31 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-
 import java.io.IOException;
 
+import se.wetcat.qatja.MQTTException;
+
 /**
- * A {@link #PINGRESP} Packet is sent by the Server to the Client in response to
- * a {@link #PINGREQ} Packet. It indicates that the Server is alive.
+ * A {@link se.wetcat.qatja.MQTTConstants#PINGRESP} Packet is sent by the Server to the Client in
+ * response to a {@link se.wetcat.qatja.MQTTConstants#PINGREQ} Packet. It indicates that the Server
+ * is alive.
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTPingresp extends MQTTMessage {
 
+  public static MQTTPingresp fromBuffer(byte[] buffer) {
+    return new MQTTPingresp(buffer);
+  }
+
   /**
-   * Construct a {@link #PINGRESP} message from a buffer
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PINGRESP} message from a buffer
    *
-   * @param buffer
-   *            The buffer
+   * @param buffer The buffer
    */
-  public MQTTPingresp(byte[] buffer) {
+  private MQTTPingresp(byte[] buffer) {
 
     int i = 0;
     // Type (just for clarity sake we'll read it...)

@@ -16,23 +16,24 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-
 import java.io.IOException;
 
+import se.wetcat.qatja.MQTTException;
+
 /**
- * The {@link #CONNACK} Packet is the packet sent by the Server in response to a
- * {@link #CONNECT} Packet received from a Client. The first packet sent from
- * the Server to the Client MUST be a {@link #CONNACK} Packet [MQTT-3.2.0-1].
+ * The {@link se.wetcat.qatja.MQTTConstants#CONNACK} Packet is the packet sent by the Server in
+ * response to a {@link se.wetcat.qatja.MQTTConstants#CONNECT} Packet received from a Client. The
+ * first packet sent from the Server to the Client MUST be a
+ * {@link se.wetcat.qatja.MQTTConstants#CONNACK} Packet [MQTT-3.2.0-1].
+ * <p>
+ * If the Client does not receive a {@link se.wetcat.qatja.MQTTConstants#CONNACK} Packet from the
+ * Server within a reasonable amount of time, the Client SHOULD close the Network Connection. A
+ * "reasonable" amount of time depends on the type of application and the communications
+ * infrastructure.
  *
- * If the Client does not receive a {@link #CONNACK} Packet from the Server
- * within a reasonable amount of time, the Client SHOULD close the Network
- * Connection. A "reasonable" amount of time depends on the type of application
- * and the communications infrastructure.
- *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTConnack extends MQTTMessage {
 
@@ -40,7 +41,11 @@ public class MQTTConnack extends MQTTMessage {
   private byte RESERVED;
   private byte returnCode;
 
-  public MQTTConnack(byte[] buffer) {
+  public static MQTTConnack fromBuffer(byte[] buffer) {
+    return new MQTTConnack(buffer);
+  }
+
+  private MQTTConnack(byte[] buffer) {
     int i = 0;
 
     // Type (just for clarity sake we'll set it...)

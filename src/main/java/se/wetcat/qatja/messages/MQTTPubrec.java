@@ -16,41 +16,48 @@ package se.wetcat.qatja.messages;
  * limitations under the License.
  */
 
-import se.wetcat.qatja.MQTTException;
-import se.wetcat.qatja.MQTTHelper;
-import se.wetcat.qatja.MQTTConstants;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import se.wetcat.qatja.MQTTConstants;
+import se.wetcat.qatja.MQTTException;
+import se.wetcat.qatja.MQTTHelper;
+
 /**
- * MQTT {@link #PUBREC} message is the response to a {@link #PUBLISH} message.
- * It is the second packet of the {@link #EXACTLY_ONCE} flow
+ * MQTT {@link se.wetcat.qatja.MQTTConstants#PUBREC} message is the response to a
+ * {@link se.wetcat.qatja.MQTTConstants#PUBLISH} message. It is the second packet of the
+ * {@link se.wetcat.qatja.MQTTConstants#EXACTLY_ONCE} flow
  *
- * @author  Andreas Goransson
+ * @author Andreas Goransson
  * @version 1.0.0
- * @since   2017-05-06
+ * @since 2017-05-06
  */
 public class MQTTPubrec extends MQTTMessage {
 
+  public static MQTTPubrec newInstance(int packageIdentifier) {
+    return new MQTTPubrec(packageIdentifier);
+  }
+
+  public static MQTTPubrec fromBuffer(byte[] buffer) {
+    return new MQTTPubrec(buffer);
+  }
+
   /**
-   * Construct a {@link #PUBREC} message
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBREC} message
    *
-   * @param packageIdentifier
-   *            The package identifier
+   * @param packageIdentifier The package identifier
    */
-  public MQTTPubrec(int packageIdentifier) {
+  private MQTTPubrec(int packageIdentifier) {
     setType(MQTTConstants.PUBREC);
     setPackageIdentifier(packageIdentifier);
   }
 
   /**
-   * Construct a {@link #PUBREC} message from a buffer
+   * Construct a {@link se.wetcat.qatja.MQTTConstants#PUBREC} message from a buffer
    *
-   * @param buffer
-   *            The buffer
+   * @param buffer The buffer
    */
-  public MQTTPubrec(byte[] buffer) {
+  private MQTTPubrec(byte[] buffer) {
 
     int i = 0;
 
