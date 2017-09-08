@@ -115,10 +115,8 @@ public class MQTTHelper {
 
   public static void decodeFlags(byte flags) {
     boolean username = ((flags >> 7) == 1 ? true : false);
-    System.out.println("username flag: " + username);
 
     boolean password = ((flags >> 6) == 1 ? true : false);
-    System.out.println("password flag: " + password);
   }
 
   /**
