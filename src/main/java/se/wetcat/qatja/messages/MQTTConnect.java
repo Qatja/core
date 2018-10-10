@@ -79,7 +79,7 @@ public class MQTTConnect extends MQTTMessage {
   }
 
   public static MQTTConnect newInstance(String clientIdentifier) {
-    return new MQTTConnect();
+    return new MQTTConnect(clientIdentifier);
   }
 
   public static MQTTConnect newInstance(String clientIdentifier, String username, String password) {
@@ -107,7 +107,7 @@ public class MQTTConnect extends MQTTMessage {
    * seconds.
    */
   private MQTTConnect() {
-    this("");
+    this("Qatja-" + System.nanoTime());
   }
 
   /**
